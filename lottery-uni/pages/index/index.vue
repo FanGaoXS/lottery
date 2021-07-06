@@ -11,11 +11,16 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				title: '欢迎'
 			}
 		},
 		onLoad() {
-
+			setTimeout(()=>{
+				this.$u.route({
+					type: 'reLaunch',
+					url: 'pages/register/register'
+				})
+			},0)
 		},
 		methods: {
 

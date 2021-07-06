@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fangaoxs.lotteryserver.mapper.UserMapper">
+    <!--select的条件sql（全有）-->
+    <sql id="selectCondition">
+        <if test=" id!=null and id!='' ">
+            AND id = #{id}
+        </if>
+        <if test=" name!=null and name!='' ">
+            AND name = #{name}
+        </if>
+        <if test=" avatar!=null and avatar!='' ">
+            AND avatar = #{avatar}
+        </if>
+        <if test=" phone!=null and phone!='' ">
+            AND phone = #{phone}
+        </if>
+    </sql>
+    <!--update的条件sql（除了自增主键id）-->
+    <sql id="updateCondition">
+        <if test=" name!=null and name!='' ">
+            name = #{name},
+        </if>
+        <if test=" avatar!=null and avatar!='' ">
+            avatar = #{avatar},
+        </if>
+        <if test=" phone!=null and phone!='' ">
+            phone = #{phone},
+        </if>
+    </sql>
+
+    <!--返回的结果集-->
+    <resultMap id="UserMap" type="com.fangaoxs.lotteryserver.pojo.User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="avatar" property="avatar"/>
+        <result column="phone" property="phone"/>
+    </resultMap>
+
+    <!--新增一条记录-->
+    <insert id="insertOne"
+            keyProperty="id"
+            useGeneratedKeys="true"
+            parameterType="com.fangaoxs.lotteryserver.pojo.User">
+        INSERT INTO user
+            (name,avatar,phone)
+        VALUES
+            (#{name},#{avatar},#{phone})
+    </insert>
+    <!--删除一条记录-->
+    <delete id="deleteOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.User">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+    <!--修改一条记录（根据id主键）-->
+    <update id="updateOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.User">
+        UPDATE
+            user
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="updateCondition"></include>
+        </trim>
+        WHERE
+            id = #{id}
+    </update>
+    <!--查询所有（可分页，可单条件，可多条件）-->
+    <select id="selectList"
+            parameterType="com.fangaoxs.lotteryserver.pojo.User"
+            resultMap="UserMap">
+        SELECT
+            *
+        FROM
+            user
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+        ORDER BY
+            id
+    </select>
+    <!--查询一条（可单条件，可多条件）-->
+    <select id="selectOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.User"
+            resultMap="UserMap">
+        SELECT
+            *
+        FROM
+            user
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+    </select>
+    <!--根据主键id（效率高）查询记录数（可单条件，可多条件）-->
+    <select id="count"
+            parameterType="com.fangaoxs.lotteryserver.pojo.User"
+            resultType="long">
+        SELECT
+            count(id)
+        FROM
+            user
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+    </select>
+</mapper>
