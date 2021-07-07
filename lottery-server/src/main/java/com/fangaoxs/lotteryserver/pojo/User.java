@@ -1,6 +1,7 @@
 package com.fangaoxs.lotteryserver.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +34,11 @@ public class User implements Serializable {
      * 用户联系方式
      */
     private String phone;
+
+    /**
+     * 用户登记的时间
+     */
+    private Date time;
 
     private static final long serialVersionUID = 1L;
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  * @Auther: 吴青珂
  * @Date: 2021/07/06/18:15
- * @Description:
+ * @Description:    自定义response返回体
  */
 @Data
 @AllArgsConstructor

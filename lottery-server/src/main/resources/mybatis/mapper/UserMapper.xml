@@ -17,6 +17,9 @@
         <if test=" phone!=null and phone!='' ">
             AND phone = #{phone}
         </if>
+        <if test=" time!=null and time!='' ">
+            AND time = #{time }
+        </if>
     </sql>
     <!--update的条件sql（除了自增主键id）-->
     <sql id="updateCondition">
@@ -29,6 +32,9 @@
         <if test=" phone!=null and phone!='' ">
             phone = #{phone},
         </if>
+        <if test=" time!=null and time!='' ">
+            time = #{time},
+        </if>
     </sql>
 
     <!--返回的结果集-->
@@ -37,6 +43,7 @@
         <result column="name" property="name"/>
         <result column="avatar" property="avatar"/>
         <result column="phone" property="phone"/>
+        <result column="time" property="time"/>
     </resultMap>
 
     <!--新增一条记录-->
@@ -45,9 +52,9 @@
             useGeneratedKeys="true"
             parameterType="com.fangaoxs.lotteryserver.pojo.User">
         INSERT INTO user
-            (name,avatar,phone)
+            (name,avatar,phone,time)
         VALUES
-            (#{name},#{avatar},#{phone})
+            (#{name},#{avatar},#{phone},#{time})
     </insert>
     <!--删除一条记录-->
     <delete id="deleteOne"
