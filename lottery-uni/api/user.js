@@ -3,7 +3,7 @@ import request from '@/utils/request.js'
 export function registerUser(user){
 	return request({
 		method: 'POST',
-		url: '/user/registerUser',
+		url: 'lottery-server/user/registerUser',
 		data: {
 			name: user.nickName.trim(),
 			avatar: user.avatarUrl
@@ -14,7 +14,7 @@ export function registerUser(user){
 export function isRegister(user){
 	return request({
 		method: 'GET',
-		url: '/user/isRegister',
+		url: 'lottery-server/user/isRegister',
 		params: {
 			name: user.nickName,
 			avatar: user.avatarUrl

@@ -1,26 +1,56 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-websocket
+        dev
+        @onReceiveMessage="handleReceiveMessage"
+        url="ws://localhost:8080/lottery-server/userWebsocket/wqk">
+    </b-websocket>
+    <ul>
+      <li v-for="item in list" :key="item.id">{{item}}</li>
+    </ul>
+    <h2>{{totalSize}}</h2>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import BWebsocket from "@/components/BWebsocket";
+
+import {
+  getUserList
+} from "@/api/user";
 
 export default {
+  created() {
+    this.fetchList()
+  },
+  methods: {
+    fetchList() {
+      getUserList().then(res=>{
+        console.log(res)
+        this.list = res.data.items
+        this.totalSize = res.data.totalSize
+      })
+    },
+    handleReceiveMessage(e){
+      console.log(e)
+    }
+  },
   name: 'app',
   components: {
-    HelloWorld
-  }
+    BWebsocket
+  },
+  data() {
+    return {
+      totalSize: undefined,
+      list:[]
+    }
+  },
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;

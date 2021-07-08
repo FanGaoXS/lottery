@@ -59,6 +59,7 @@
 				this.userInfo.nickName = stroageInfo.nickName
 				this.userInfo.avatarUrl = stroageInfo.avatarUrl
 				isRegister(this.userInfo).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
+					console.log(res.data?'已登记':'未登记');
 					this.isRegister = res.data
 				})
 			}
@@ -83,11 +84,12 @@
 					desc: '测试',
 					success({userInfo}) {
 						//获取用户个人信息成功
-						console.log('获取用户个人信息成功->',userInfo);
+						console.log('从微信服务器获取用户个人信息成功->',userInfo);
 						that.userInfo.nickName = userInfo.nickName
 						that.userInfo.avatarUrl = userInfo.avatarUrl
 						setInfo(that.userInfo) //将用户个人信息放置内存
 						isRegister(that.userInfo).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
+							console.log(res.data?'已登记':'未登记');
 							that.isRegister = res.data
 							if(!res.data){ //false表示未登记
 								that.handleRegisterUser() //往后端登记用户
@@ -102,7 +104,7 @@
 			},
 			handleRegisterUser(){
 				registerUser(this.userInfo).then(res=>{ //后端响应成功
-					console.log(res);
+					console.log(res.data?'登记成功':'登记失败');
 					this.$refs.uTips.show({
 						title: res.data?'登记成功':'登记失败',
 						type: res.data?'success':'error',
@@ -112,7 +114,7 @@
 				}).catch(error=>{ //后端响应失败
 					console.log('登记错误->',error);
 					this.$refs.uTips.show({
-						title: '登记失败->'+error,
+						title: ('登记错误->',error),
 						type: 'error',
 						duration: '2000'
 					})

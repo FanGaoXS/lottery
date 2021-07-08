@@ -2,9 +2,12 @@ package com.fangaoxs.lotteryserver.controller;
 
 import com.fangaoxs.lotteryserver.response.ResultResponse;
 import com.fangaoxs.lotteryserver.service.UserService;
+import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,6 +54,20 @@ public class UserController {
         return new ResultResponse()
                 .setData(result)
                 .setMessage("移除已登记用户");
+    }
+
+    @GetMapping("/selectUserList")
+    public ResultResponse selectAllUser(){
+        List<VoUser> voUserList = userService.selectUserList();
+        Long totalSize = userService.totalSize();
+
+        VoList<VoUser> voList = new VoList<>();
+        voList.setItems(voUserList);
+        voList.setTotalSize(totalSize);
+
+        return new ResultResponse()
+                .setData(voList)
+                .setMessage("登记用户列表");
     }
 
 }
