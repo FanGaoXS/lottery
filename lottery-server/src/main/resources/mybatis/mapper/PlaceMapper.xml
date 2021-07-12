@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fangaoxs.lotteryserver.mapper.PlaceMapper">
+    <sql id="placeAs">
+        p.id                        AS pId,
+        p.uuid                      AS pUuid,
+        p.name                      AS pName,
+        p.address                   AS pAddress,
+        p.time                      AS pTime
+    </sql>
+    <!--select的条件sql（全有）-->
+    <sql id="selectCondition">
+        <if test=" id!=null and id!='' ">
+            AND id = #{id}
+        </if>
+        <if test=" uuid!=null and uuid!='' ">
+            AND uuid = #{uuid}
+        </if>
+        <if test=" name!=null and name!='' ">
+            AND name = #{name}
+        </if>
+        <if test=" address!=null and address!='' ">
+            AND address = #{address}
+        </if>
+        <if test=" time!=null and time!='' ">
+            AND time = #{time}
+        </if>
+    </sql>
+    <!--update的条件sql（除了自增主键id）-->
+    <sql id="updateCondition">
+        <if test=" uuid!=null and uuid!='' ">
+            uuid = #{uuid},
+        </if>
+        <if test=" name!=null and name!='' ">
+            name = #{name},
+        </if>
+        <if test=" address!=null and address!='' ">
+            address = #{address},
+        </if>
+        <if test=" time!=null and time!='' ">
+            time = #{time},
+        </if>
+    </sql>
+    <!--分页的条件sql（当前页，每页记录数）-->
+    <sql id="limitCondition">
+        <if test=" currentPage!=null and currentPage!='' and pageSize!=null and pageSize!='' ">
+            <bind name="offset" value="pageSize*(currentPage-1)"/>
+            <bind name="rows" value="pageSize"/>
+            #{offset},#{rows}
+        </if>
+    </sql>
+    <!--返回的结果集-->
+    <resultMap id="PlaceMap" type="com.fangaoxs.lotteryserver.pojo.Place">
+        <id column="id" property="id"/>
+        <result column="uuid" property="uuid"/>
+        <result column="name" property="name"/>
+        <result column="address" property="address"/>
+        <result column="time" property="time"/>
+    </resultMap>
+    <!--新增一条记录-->
+    <insert id="insertOne"
+            keyProperty="id"
+            useGeneratedKeys="true"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Place">
+        INSERT INTO place
+            (uuid,name,address,time)
+        VALUES
+            (#{uuid},#{name},#{address},#{time})
+    </insert>
+    <!--删除一条记录-->
+    <delete id="deleteOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Place">
+        DELETE
+        FROM place
+        WHERE id = #{id}
+    </delete>
+    <!--修改一条记录（根据id主键）-->
+    <update id="updateOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Place">
+        UPDATE
+            place
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="updateCondition"></include>
+        </trim>
+        WHERE
+            id = #{id}
+    </update>
+    <!--查询所有（可分页，可单条件，可多条件）-->
+    <select id="selectList"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Place"
+            resultMap="PlaceMap">
+        SELECT
+        *
+        FROM
+        place
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+        ORDER BY
+        id
+        <trim prefix="LIMIT">
+            <include refid="limitCondition"></include>
+        </trim>
+    </select>
+    <!--查询一条（可单条件，可多条件）-->
+    <select id="selectOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Place"
+            resultMap="PlaceMap">
+        SELECT
+            *
+        FROM
+            place
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+    </select>
+    <!--根据主键id（效率高）查询记录数（可单条件，可多条件）-->
+    <select id="count"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Place"
+            resultType="long">
+        SELECT
+            count(id)
+        FROM
+            place
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+    </select>
+</mapper>

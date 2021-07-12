@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fangaoxs.lotteryserver.mapper.RecordMapper">
+    <sql id="recordAs">
+        r.id                AS rId,
+        r.uuid              AS rUuid,
+        r.time              AS rTime,
+        r.userId            AS rUserId,
+        r.prizeId           AS rPrizeId,
+        r.placeId           AS rPlaceId
+    </sql>
+    <!--select的条件sql（全有）-->
+    <sql id="selectCondition">
+        <if test=" id!=null and id!='' ">
+            AND r.id = #{id}
+        </if>
+        <if test=" uuid!=null and uuid!='' ">
+            AND r.uuid = #{uuid}
+        </if>
+        <if test=" time!=null and time!='' ">
+            AND r.time = #{time}
+        </if>
+        <if test=" userId!=null and userId!='' ">
+            AND r.userId = #{userId}
+        </if>
+        <if test=" prizeId!=null and prizeId!='' ">
+            AND r.prizeId = #{prizeId}
+        </if>
+        <if test=" placeId!=null and placeId!='' ">
+            AND r.placeId = #{placeId}
+        </if>
+    </sql>
+    <!--update的条件sql（除了自增主键id）-->
+    <sql id="updateCondition">
+        <if test=" uuid!=null and uuid!='' ">
+            r.uuid = #{uuid},
+        </if>
+        <if test=" time!=null and time!='' ">
+            r.time = #{time},
+        </if>
+        <if test=" userId!=null and userId!='' ">
+            r.userId = #{userId},
+        </if>
+        <if test=" prizeId!=null and prizeId!='' ">
+            r.prizeId = #{prizeId},
+        </if>
+        <if test=" placeId!=null and placeId!='' ">
+            r.placeId = #{placeId},
+        </if>
+    </sql>
+    <!--分页的条件sql（当前页，每页记录数）-->
+    <sql id="limitCondition">
+        <if test=" currentPage!=null and currentPage!='' and pageSize!=null and pageSize!='' ">
+            <bind name="offset" value="pageSize*(currentPage-1)"/>
+            <bind name="rows" value="pageSize"/>
+            #{offset},#{rows}
+        </if>
+    </sql>
+    <!--返回的结果集-->
+    <resultMap id="RecordMap" type="com.fangaoxs.lotteryserver.pojo.Record">
+        <id column="rId" property="id"/>
+        <result column="rUuid" property="uuid"/>
+        <result column="rTime" property="time"/>
+        <result column="rUserId" property="userId"/>
+        <result column="rPrizeId" property="prizeId"/>
+        <result column="rPlaceId" property="placeId"/>
+        <association property="user" javaType="com.fangaoxs.lotteryserver.pojo.User">
+            <id column="uId" property="id"/>
+            <result column="uUuid" property="uuid"/>
+            <result column="uName" property="name"/>
+            <result column="uAvatar" property="avatar"/>
+            <result column="uPhone" property="phone"/>
+            <result column="uTime" property="time"/>
+        </association>
+        <association property="prize" javaType="com.fangaoxs.lotteryserver.pojo.Prize">
+            <id column="prId" property="id"/>
+            <result column="prUuid" property="uuid"/>
+            <result column="prIdx" property="idx"/>
+            <result column="prName" property="name"/>
+            <result column="prAmount" property="amount"/>
+            <result column="prBalance" property="balance"/>
+            <result column="prDescription" property="description"/>
+            <result column="prTime" property="time"/>
+        </association>
+        <association property="place" javaType="com.fangaoxs.lotteryserver.pojo.Place">
+            <id column="pId" property="id"/>
+            <result column="pUuid" property="uuid"/>
+            <result column="pName" property="name"/>
+            <result column="pAddress" property="address"/>
+            <result column="pTime" property="time"/>
+        </association>
+    </resultMap>
+    <!--新增一条记录-->
+    <insert id="insertOne"
+            keyProperty="id"
+            useGeneratedKeys="true"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Record">
+        INSERT INTO record
+            ()
+        VALUES ()
+    </insert>
+    <!--删除一条记录-->
+    <delete id="deleteOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Record">
+        DELETE
+        FROM record
+        WHERE id = #{id}
+    </delete>
+    <!--修改一条记录（根据id主键）-->
+    <update id="updateOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Record">
+        UPDATE
+        record
+        <trim prefix="SET" suffixOverrides=",">
+            <include refid="updateCondition"></include>
+        </trim>
+        WHERE
+        id = #{id}
+    </update>
+    <!--查询所有（可分页，可单条件，可多条件）-->
+    <select id="selectList"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Record"
+            resultMap="RecordMap">
+        SELECT
+        *
+        FROM
+        record
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+        ORDER BY
+        id
+        <trim prefix="LIMIT">
+            <include refid="limitCondition"></include>
+        </trim>
+    </select>
+    <!--查询一条（可单条件，可多条件）-->
+    <select id="selectOne"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Record"
+            resultMap="RecordMap">
+        SELECT
+        *
+        FROM
+        record
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+    </select>
+    <!--根据主键id（效率高）查询记录数（可单条件，可多条件）-->
+    <select id="count"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Record"
+            resultType="long">
+        SELECT
+        count(id)
+        FROM
+        record
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <include refid="selectCondition"></include>
+        </trim>
+    </select>
+</mapper>

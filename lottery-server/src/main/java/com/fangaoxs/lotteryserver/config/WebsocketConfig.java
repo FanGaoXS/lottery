@@ -15,8 +15,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  * @Date: 2021/07/08/16:12
  * @Description:  websocket启动配置类
  */
-@Configuration
-/*@EnableWebSocket
+/*@Configuration
+@EnableWebSocket
 @EnableScheduling*/
 public class WebsocketConfig {
 

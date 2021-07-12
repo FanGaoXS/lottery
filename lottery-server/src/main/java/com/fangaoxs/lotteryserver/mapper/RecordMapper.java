@@ -1,6 +1,6 @@
 package com.fangaoxs.lotteryserver.mapper;
 
-import com.fangaoxs.lotteryserver.pojo.User;
+import com.fangaoxs.lotteryserver.pojo.Record;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -10,59 +10,59 @@ import java.util.List;
  * Created with IntelliJ IDEA.
  *
  * @Auther: 吴青珂
- * @Date: 2021/07/12/13:05
+ * @Date: 2021/07/12/13:09
  * @Description:
  */
 @Mapper
 @Repository
-public interface UserMapper {
+public interface RecordMapper {
 
     /**
      * 增加一条记录
      *
-     * @param user 登记用户对象
+     * @param record 中奖记录对象
      * @return 增加成功的记录数
      */
-    Integer insertOne(User user);
+    Integer insertOne(Record record);
 
     /**
      * 删除一条记录
      *
-     * @param user 登记用户对象
+     * @param record 中奖记录对象
      * @return 删除成功的记录数
      */
-    Integer deleteOne(User user);
+    Integer deleteOne(Record record);
 
     /**
      * 修改一条记录
      *
-     * @param user 登记用户对象
+     * @param record 中奖记录对象
      * @return 修改成功的记录数
      */
-    Integer updateOne(User user);
+    Integer updateOne(Record record);
 
     /**
      * 查询所有集合（可分页，可多条件，可单条件）
      *
-     * @param user 登记用户对象
-     * @return user集合
+     * @param record 中奖记录对象
+     * @return record集合
      */
-    List<User> selectList(User user);
+    List<Record> selectList(Record record);
 
     /**
-     * 查询一条user记录（可多条件，可单条件）
+     * 查询一条record记录（可多条件，可单条件）
      *
-     * @param user 登记用户对象
-     * @return 一条登记用户对象
+     * @param record 中奖记录对象
+     * @return 一条中奖记录对象
      */
-    User selectOne(User user);
+    Record selectOne(Record record);
 
     /**
      * 查询记录数（可条件查询）
      *
-     * @param user 登记用户对象
+     * @param record 中奖记录对象
      * @return 记录数
      */
-    Long count(User user);
+    Long count(Record record);
 
 }

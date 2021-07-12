@@ -3,6 +3,7 @@ package com.fangaoxs.lotteryserver.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fangaoxs.lotteryserver.pojo.base.Page;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,14 +15,19 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
+public class User extends Page {
     /**
      * 自增主键
      */
     private Integer id;
 
     /**
-     * 用户名
+     * 用户唯一标识
+     */
+    private String uuid;
+
+    /**
+     * 用户昵称
      */
     private String name;
 
@@ -40,5 +46,14 @@ public class User implements Serializable {
      */
     private Date time;
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * 用户所属会场编号
+     */
+    private Integer placeId;
+
+    /**
+     * 用户所属会场
+     */
+    private Place place;
+
 }

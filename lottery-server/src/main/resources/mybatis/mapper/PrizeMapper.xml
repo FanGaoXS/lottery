@@ -2,38 +2,46 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fangaoxs.lotteryserver.mapper.UserMapper">
-    <sql id="userAs">
-        u.id                    AS uId,
-        u.uuid                  AS uUuid,
-        u.name                  AS uName,
-        u.avatar                AS uAvatar,
-        u.phone                 AS uPhone,
-        u.time                  AS uTime,
-        u.placeId               AS uPlaceId
+<mapper namespace="com.fangaoxs.lotteryserver.mapper.PrizeMapper">
+    <sql id="prizeAs">
+        pr.id                   AS prId,
+        pr.uuid                 AS prUuid,
+        pr.idx                  AS prIdx,
+        pr.name                 AS prName,
+        pr.amount               AS prAmount,
+        pr.balance              AS prBalance,
+        pr.description          AS prDescription,
+        pr.time                 AS prTime,
+        pr.placeId              AS prPlaceId
     </sql>
     <!--select的条件sql（全有）-->
     <sql id="selectCondition">
         <if test=" id!=null and id!='' ">
-            AND u.id = #{id}
+            AND pr.id = #{id}
         </if>
         <if test=" uuid!=null and uuid!='' ">
-            AND u.uuid = #{uuid}
+            AND pr.uuid = #{uuid}
+        </if>
+        <if test=" idx!=null and idx!='' ">
+            AND pr.idx = #{idx}
         </if>
         <if test=" name!=null and name!='' ">
-            AND u.name = #{name}
+            AND pr.name = #{name}
         </if>
-        <if test=" avatar!=null and avatar!='' ">
-            AND u.avatar = #{avatar}
+        <if test=" amount!=null and amount!='' ">
+            AND pr.amount = #{amount}
         </if>
-        <if test=" phone!=null and phone!='' ">
-            AND u.phone = #{phone}
+        <if test=" balance!=null and balance!='' ">
+            AND pr.balance = #{balance}
+        </if>
+        <if test=" description!=null and description!='' ">
+            AND pr.description = #{description}
         </if>
         <if test=" time!=null and time!='' ">
-            AND u.time = #{time}
+            AND pr.time = #{time}
         </if>
         <if test=" placeId!=null and placeId!='' ">
-            AND u.placeId = #{placeId}
+            AND pr.placeId = #{placeId}
         </if>
     </sql>
     <!--update的条件sql（除了自增主键id）-->
@@ -41,14 +49,20 @@
         <if test=" uuid!=null and uuid!='' ">
             uuid = #{uuid},
         </if>
+        <if test=" idx!=null and idx!='' ">
+            idx = #{idx},
+        </if>
         <if test=" name!=null and name!='' ">
             name = #{name},
         </if>
-        <if test=" avatar!=null and avatar!='' ">
-            avatar = #{avatar},
+        <if test=" amount!=null and amount!='' ">
+            amount = #{amount},
         </if>
-        <if test=" phone!=null and phone!='' ">
-            phone = #{phone},
+        <if test=" balance!=null and balance!='' ">
+            balance = #{balance},
+        </if>
+        <if test=" description!=null and description!='' ">
+            description = #{description},
         </if>
         <if test=" time!=null and time!='' ">
             time = #{time},
@@ -66,14 +80,16 @@
         </if>
     </sql>
     <!--返回的结果集-->
-    <resultMap id="UserMap" type="com.fangaoxs.lotteryserver.pojo.User">
-        <id column="uId" property="id"/>
-        <result column="uUuid" property="uuid"/>
-        <result column="uName" property="name"/>
-        <result column="uAvatar" property="avatar"/>
-        <result column="uPhone" property="phone"/>
-        <result column="uTime" property="time"/>
-        <result column="uPlaceId" property="placeId"/>
+    <resultMap id="PrizeMap" type="com.fangaoxs.lotteryserver.pojo.Prize">
+        <id column="prId" property="id"/>
+        <result column="prUuid" property="uuid"/>
+        <result column="prIdx" property="idx"/>
+        <result column="prName" property="name"/>
+        <result column="prAmount" property="amount"/>
+        <result column="prBalance" property="balance"/>
+        <result column="prDescription" property="description"/>
+        <result column="prTime" property="time"/>
+        <result column="prPlaceId" property="placeId"/>
         <association property="place" javaType="com.fangaoxs.lotteryserver.pojo.Place">
             <id column="pId" property="id"/>
             <result column="pUuid" property="uuid"/>
@@ -86,24 +102,24 @@
     <insert id="insertOne"
             keyProperty="id"
             useGeneratedKeys="true"
-            parameterType="com.fangaoxs.lotteryserver.pojo.User">
-        INSERT INTO user
-            (uuid,name,avatar,phone,time,placeId)
+            parameterType="com.fangaoxs.lotteryserver.pojo.Prize">
+        INSERT INTO prize
+            (uuid,idx,name,amount,balance,description,time,placeId)
         VALUES
-            (#{uuid},#{name},#{avatar},#{phone},#{time},#{placeId})
+            (#{uuid},#{idx},#{name},#{amount},#{balance},#{description},#{time},#{placeId})
     </insert>
     <!--删除一条记录-->
     <delete id="deleteOne"
-            parameterType="com.fangaoxs.lotteryserver.pojo.User">
+            parameterType="com.fangaoxs.lotteryserver.pojo.Prize">
         DELETE
-            FROM user
+        FROM prize
         WHERE id = #{id}
     </delete>
     <!--修改一条记录（根据id主键）-->
     <update id="updateOne"
-            parameterType="com.fangaoxs.lotteryserver.pojo.User">
+            parameterType="com.fangaoxs.lotteryserver.pojo.Prize">
         UPDATE
-            user
+            prize
         <trim prefix="SET" suffixOverrides=",">
             <include refid="updateCondition"></include>
         </trim>
@@ -112,45 +128,43 @@
     </update>
     <!--查询所有（可分页，可单条件，可多条件）-->
     <select id="selectList"
-            parameterType="com.fangaoxs.lotteryserver.pojo.User"
-            resultMap="UserMap">
+            parameterType="com.fangaoxs.lotteryserver.pojo.Prize"
+            resultMap="PrizeMap">
         SELECT
-            <include refid="userAs"></include>,
+            <include refid="prizeAs"></include>,
             <include refid="com.fangaoxs.lotteryserver.mapper.PlaceMapper.placeAs"></include>
         FROM
-            user u
-            join place p on u.placeId = p.id
+            prize pr join place p on pr.placeId = p.id
         <trim prefix="WHERE" prefixOverrides="AND">
             <include refid="selectCondition"></include>
         </trim>
         ORDER BY
-            u.id
+            pr.id
         <trim prefix="LIMIT">
             <include refid="limitCondition"></include>
         </trim>
     </select>
     <!--查询一条（可单条件，可多条件）-->
     <select id="selectOne"
-            parameterType="com.fangaoxs.lotteryserver.pojo.User"
-            resultMap="UserMap">
+            parameterType="com.fangaoxs.lotteryserver.pojo.Prize"
+            resultMap="PrizeMap">
         SELECT
-            <include refid="userAs"></include>,
+            <include refid="prizeAs"></include>,
             <include refid="com.fangaoxs.lotteryserver.mapper.PlaceMapper.placeAs"></include>
         FROM
-            user u
-            JOIN place p ON u.placeId = p.id
+            prize pr join place p on pr.placeId = p.id
         <trim prefix="WHERE" prefixOverrides="AND">
             <include refid="selectCondition"></include>
         </trim>
     </select>
     <!--根据主键id（效率高）查询记录数（可单条件，可多条件）-->
     <select id="count"
-            parameterType="com.fangaoxs.lotteryserver.pojo.User"
+            parameterType="com.fangaoxs.lotteryserver.pojo.Prize"
             resultType="long">
         SELECT
-            count(u.id)
+            count(pr.id)
         FROM
-            user u
+            prize pr
         <trim prefix="WHERE" prefixOverrides="AND">
             <include refid="selectCondition"></include>
         </trim>
