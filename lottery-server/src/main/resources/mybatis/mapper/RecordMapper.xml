@@ -35,19 +35,19 @@
     <!--update的条件sql（除了自增主键id）-->
     <sql id="updateCondition">
         <if test=" uuid!=null and uuid!='' ">
-            r.uuid = #{uuid},
+            uuid = #{uuid},
         </if>
-        <if test=" time!=null and time!='' ">
-            r.time = #{time},
+        <if test=" time!=null ">
+            time = #{time},
         </if>
         <if test=" userId!=null and userId!='' ">
-            r.userId = #{userId},
+            userId = #{userId},
         </if>
         <if test=" prizeId!=null and prizeId!='' ">
-            r.prizeId = #{prizeId},
+            prizeId = #{prizeId},
         </if>
         <if test=" placeId!=null and placeId!='' ">
-            r.placeId = #{placeId},
+            placeId = #{placeId},
         </if>
     </sql>
     <!--分页的条件sql（当前页，每页记录数）-->
@@ -98,8 +98,9 @@
             useGeneratedKeys="true"
             parameterType="com.fangaoxs.lotteryserver.pojo.Record">
         INSERT INTO record
-            ()
-        VALUES ()
+            (uuid,time,userId,prizeId,placeId)
+        VALUES
+            (#{uuid},#{time},#{userId},#{prizeId},#{placeId})
     </insert>
     <!--删除一条记录-->
     <delete id="deleteOne"
@@ -112,26 +113,32 @@
     <update id="updateOne"
             parameterType="com.fangaoxs.lotteryserver.pojo.Record">
         UPDATE
-        record
+            record
         <trim prefix="SET" suffixOverrides=",">
             <include refid="updateCondition"></include>
         </trim>
         WHERE
-        id = #{id}
+            id = #{id}
     </update>
     <!--查询所有（可分页，可单条件，可多条件）-->
     <select id="selectList"
             parameterType="com.fangaoxs.lotteryserver.pojo.Record"
             resultMap="RecordMap">
         SELECT
-        *
+            <include refid="recordAs"></include>,
+            <include refid="com.fangaoxs.lotteryserver.mapper.PlaceMapper.placeAs"></include>,
+            <include refid="com.fangaoxs.lotteryserver.mapper.PrizeMapper.prizeAs"></include>,
+            <include refid="com.fangaoxs.lotteryserver.mapper.UserMapper.userAs"></include>
         FROM
-        record
+            record r
+            join prize pr on r.prizeId = pr.id
+            join place p on r.placeId = p.id
+            join user u on r.userId = u.id
         <trim prefix="WHERE" prefixOverrides="AND">
             <include refid="selectCondition"></include>
         </trim>
         ORDER BY
-        id
+            r.id
         <trim prefix="LIMIT">
             <include refid="limitCondition"></include>
         </trim>
@@ -141,9 +148,15 @@
             parameterType="com.fangaoxs.lotteryserver.pojo.Record"
             resultMap="RecordMap">
         SELECT
-        *
+            <include refid="recordAs"></include>,
+            <include refid="com.fangaoxs.lotteryserver.mapper.PlaceMapper.placeAs"></include>,
+            <include refid="com.fangaoxs.lotteryserver.mapper.PrizeMapper.prizeAs"></include>,
+            <include refid="com.fangaoxs.lotteryserver.mapper.UserMapper.userAs"></include>
         FROM
-        record
+            record r
+            join prize pr on r.prizeId = pr.id
+            join place p on r.placeId = p.id
+            join user u on r.userId = u.id
         <trim prefix="WHERE" prefixOverrides="AND">
             <include refid="selectCondition"></include>
         </trim>
@@ -153,9 +166,9 @@
             parameterType="com.fangaoxs.lotteryserver.pojo.Record"
             resultType="long">
         SELECT
-        count(id)
+            count(r.id)
         FROM
-        record
+            record r
         <trim prefix="WHERE" prefixOverrides="AND">
             <include refid="selectCondition"></include>
         </trim>

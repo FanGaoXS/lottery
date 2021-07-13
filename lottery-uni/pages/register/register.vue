@@ -10,6 +10,15 @@
 			<view class="name-container">
 				<text>{{userInfo.nickName}}</text>
 			</view>
+			<view class="name-container">
+				<text>{{registerInfo.place.name}}</text>
+			</view>
+			<view class="name-container">
+				<text>{{registerInfo.place.address}}</text>
+			</view>
+			<view class="name-container">
+				<text>{{registerInfo.time | timeFilter}}</text>
+			</view>
 			<!-- 登记状态 -->
 			<view class="status-container">
 				<u-icon
@@ -45,31 +54,56 @@
 <script>
 	import {
 		registerUser,
-		isRegister
+		isRegister,
+		getRegister
 	} from '@/api/user.js'
+	
 	import {
 		setInfo,
 		getInfo
 	} from '@/utils/info.js'
+	
 	export default {
-		onLoad() {
+		filters: {
+			timeFilter: function(value) {
+				if(value){
+					return new Date(value).toLocaleString();
+				}
+			}
+		},
+		onLoad({placeId}) { //页面一加载就获取placeId会场编号
+			this.placeId = placeId
 			const stroageInfo = getInfo()
 			if(stroageInfo!==''){
 				// 如果内存中的userInfo不为空（说明曾经可能登记过）
 				this.userInfo.nickName = stroageInfo.nickName
 				this.userInfo.avatarUrl = stroageInfo.avatarUrl
-				isRegister(this.userInfo).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
+				isRegister(this.userInfo,this.placeId).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
 					console.log(res.data?'已登记':'未登记');
-					this.isRegister = res.data
+					this.isRegister = (res.data?true:false)
+					if(res.data){
+						this.registerInfo.time = res.data.time;
+						this.registerInfo.place.name = res.data.place.name
+						this.registerInfo.place.address = res.data.place.address
+					}
 				})
 			}
 		},
 		data() {
 			return {
 				isRegister: false,
+				placeId: undefined,
 				userInfo:{
+					id: undefined,
 					avatarUrl: '',
-					nickName: ''
+					nickName: '',
+				},
+				registerInfo:{
+					time: undefined,
+					place: {
+						name: undefined,
+						address: undefined
+					}
 				}
 			}
 		},
@@ -88,10 +122,14 @@
 						that.userInfo.nickName = userInfo.nickName
 						that.userInfo.avatarUrl = userInfo.avatarUrl
 						setInfo(that.userInfo) //将用户个人信息放置内存
-						isRegister(that.userInfo).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
+						isRegister(that.userInfo,that.placeId).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
 							console.log(res.data?'已登记':'未登记');
-							that.isRegister = res.data
-							if(!res.data){ //false表示未登记
+							that.isRegister = (res.data?true:false)
+							if(res.data){ //true表示已登记
+								that.registerInfo.time = res.data.time;
+								that.registerInfo.place.name = res.data.place.name
+								that.registerInfo.place.address = res.data.place.address
+							} else {
 								that.handleRegisterUser() //往后端登记用户
 							}
 						})
@@ -103,7 +141,7 @@
 				})
 			},
 			handleRegisterUser(){
-				registerUser(this.userInfo).then(res=>{ //后端响应成功
+				registerUser(this.userInfo,this.placeId).then(res=>{ //后端响应成功
 					console.log(res.data?'登记成功':'登记失败');
 					this.$refs.uTips.show({
 						title: res.data?'登记成功':'登记失败',

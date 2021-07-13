@@ -39,7 +39,7 @@
         <if test=" address!=null and address!='' ">
             address = #{address},
         </if>
-        <if test=" time!=null and time!='' ">
+        <if test=" time!=null ">
             time = #{time},
         </if>
     </sql>

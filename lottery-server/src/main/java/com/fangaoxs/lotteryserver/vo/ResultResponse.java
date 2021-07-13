@@ -1,4 +1,4 @@
-package com.fangaoxs.lotteryserver.response;
+package com.fangaoxs.lotteryserver.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

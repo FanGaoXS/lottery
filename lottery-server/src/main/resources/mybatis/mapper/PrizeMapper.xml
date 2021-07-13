@@ -64,7 +64,7 @@
         <if test=" description!=null and description!='' ">
             description = #{description},
         </if>
-        <if test=" time!=null and time!='' ">
+        <if test=" time!=null ">
             time = #{time},
         </if>
         <if test=" placeId!=null and placeId!='' ">

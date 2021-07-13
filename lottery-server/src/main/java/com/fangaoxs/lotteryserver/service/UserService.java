@@ -1,51 +1,36 @@
 package com.fangaoxs.lotteryserver.service;
 
+import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoUser;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
  *
  * @Auther: 吴青珂
- * @Date: 2021/07/07/12:43
+ * @Date: 2021/07/13/12:50
  * @Description:
  */
 @Service
 public interface UserService {
 
-    /**
-     * 登记用户
-     * @param voUser
-     * @return
-     */
-    Boolean registerUser(VoUser voUser);
+    Boolean insertOneUserWithPlaceId(VoUser voUser);
 
-    /**
-     * 移除登记的用户
-     * @param id
-     * @return
-     */
-    Boolean removeUser(Integer id);
+    Boolean deleteOneUser(Integer id);
 
-    /**
-     * 查询用户是否存在
-     * @param voUser
-     * @return
-     */
-    Boolean isUserExist(VoUser voUser);
+    Boolean updateOneUser(VoUser voUser);
 
-    /**
-     * 列出所有登记的用户
-     * @return
-     */
-    List<VoUser> selectUserList();
+    VoList<VoUser> selectAllUser();
 
-    /**
-     * 查询登记用户的数量
-     * @return
-     */
-    Long totalSize();
+    VoList<VoUser> selectListUser(Integer currentPage,
+                                  Integer pageSize);
+
+    VoList<VoUser> selectListUserByPlaceId(Integer placeId,
+                                           Integer currentPage,
+                                           Integer pageSize);
+
+    VoUser selectOneUserByNameWithPlaceId(String name,Integer placeId);
+
+    VoUser selectOneUserById(Integer id);
 
 }

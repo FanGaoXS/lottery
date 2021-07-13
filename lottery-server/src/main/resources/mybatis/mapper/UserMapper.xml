@@ -50,7 +50,7 @@
         <if test=" phone!=null and phone!='' ">
             phone = #{phone},
         </if>
-        <if test=" time!=null and time!='' ">
+        <if test=" time!=null ">
             time = #{time},
         </if>
         <if test=" placeId!=null and placeId!='' ">
