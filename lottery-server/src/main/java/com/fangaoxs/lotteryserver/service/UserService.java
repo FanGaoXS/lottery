@@ -1,8 +1,11 @@
 package com.fangaoxs.lotteryserver.service;
 
+import com.fangaoxs.lotteryserver.pojo.User;
 import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoUser;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +27,8 @@ public interface UserService {
 
     VoList<VoUser> selectListUser(Integer currentPage,
                                   Integer pageSize);
+
+    List<User> selectListUserByPlaceId(Integer placeId);
 
     VoList<VoUser> selectListUserByPlaceId(Integer placeId,
                                            Integer currentPage,

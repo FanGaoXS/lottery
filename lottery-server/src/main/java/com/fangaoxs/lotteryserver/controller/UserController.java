@@ -5,6 +5,7 @@ import com.fangaoxs.lotteryserver.vo.ResultResponse;
 import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,13 +26,17 @@ public class UserController {
     public ResultResponse insertOneUser(@RequestBody VoUser voUser){
         System.out.println("voUser = " + voUser);
         Boolean data = false;
-        VoUser dbUser = userService.selectOneUserByNameWithPlaceId(voUser.getName(), voUser.getPlaceId());
-        if (dbUser==null){ //如果用户不存在且不在当前会场则执行插入
+        StringBuilder message = new StringBuilder("用户登记");
+        try {
             data = userService.insertOneUserWithPlaceId(voUser);
+        } catch (DataAccessException e){
+//            e.printStackTrace();
+            message.append("：昵称重复");
         }
+
         return new ResultResponse()
                 .setData(data)
-                .setMessage("用户登记");
+                .setMessage(message.toString());
     }
 
     @GetMapping("/deleteOneUser")

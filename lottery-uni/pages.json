@@ -13,7 +13,8 @@
 			"path" : "pages/register/register",
 			"style" :{
 				"navigationBarTitleText": "请登记",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"disableScroll": true
 			}
 		}
 	],
@@ -29,7 +30,7 @@
 			{
 				"name": "扫码登记页面", //模式名称
 				"path": "pages/register/register", //启动页面，必选
-				"query": "placeId=64" //启动参数，在页面的onLoad函数里面得到
+				"query": "placeId=70" //启动参数，在页面的onLoad函数里面得到
 			}
 		]
 	}

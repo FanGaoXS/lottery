@@ -26,6 +26,13 @@ public interface RecordMapper {
     Integer insertOne(Record record);
 
     /**
+     * 批量增加记录
+     * @param recordList 中奖记录对象集合
+     * @return  增加成功的记录数
+     */
+    Integer insertBatch(List<Record> recordList);
+
+    /**
      * 删除一条记录
      *
      * @param record 中奖记录对象

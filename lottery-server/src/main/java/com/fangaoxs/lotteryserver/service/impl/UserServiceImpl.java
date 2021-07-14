@@ -49,11 +49,8 @@ public class UserServiceImpl implements UserService {
     public Boolean updateOneUser(VoUser voUser) {
         User user = new User();
         user.setId(voUser.getId());
-        user.setUuid(voUser.getUuid());
         user.setName(voUser.getName());
         user.setAvatar(voUser.getAvatar());
-        user.setTime(voUser.getTime());
-        user.setPlaceId(voUser.getPlaceId());
         return userMapper.updateOne(user)> 0 ;
     }
 
@@ -81,6 +78,13 @@ public class UserServiceImpl implements UserService {
         voList.setTotalSize(userMapper.count(user));
 
         return voList;
+    }
+
+    @Override
+    public List<User> selectListUserByPlaceId(Integer placeId) {
+        User user = new User();
+        user.setPlaceId(placeId);
+        return userMapper.selectList(user);
     }
 
     @Override
@@ -125,12 +129,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<VoUser> getItems(User user){
-        ArrayList<VoUser> voList = new ArrayList<>();
-        List<User> list = userMapper.selectList(user);
-        list.forEach(dbUser->{
-            voList.add(new VoUser(dbUser));
+        ArrayList<VoUser> list = new ArrayList<>();
+        List<User> userList = userMapper.selectList(user);
+        userList.forEach(dbUser->{
+            list.add(new VoUser(dbUser));
         });
-        return voList;
+        return list;
     }
 
 }

@@ -47,10 +47,8 @@ public class PlaceServiceImpl implements PlaceService {
     public Boolean updateOnePlace(VoPlace voPlace) {
         Place place = new Place();
         place.setId(voPlace.getId());
-        place.setUuid(voPlace.getUuid());
         place.setName(voPlace.getName());
         place.setAddress(voPlace.getAddress());
-        place.setTime(voPlace.getTime());
         return placeMapper.updateOne(place) > 0 ;
     }
 
@@ -109,8 +107,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     private List<VoPlace> getItems(Place place){
-        List<Place> placeList = placeMapper.selectList(place);
         ArrayList<VoPlace> list = new ArrayList<>();
+        List<Place> placeList = placeMapper.selectList(place);
         placeList.forEach(dbPlace -> {
             list.add(new VoPlace(dbPlace));
         });

@@ -4,7 +4,10 @@ import com.fangaoxs.lotteryserver.service.PlaceService;
 import com.fangaoxs.lotteryserver.vo.ResultResponse;
 import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoPlace;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,14 +29,16 @@ public class PlaceController {
     public ResultResponse insertOnePlace(@RequestBody VoPlace voPlace){
         System.out.println("voPlace = " + voPlace);
         Boolean data = false;
-        VoPlace dbPlace = placeService.selectOnePlaceByName(voPlace.getName());
-        //查询数据库中是否已经存在该记录
-        if (dbPlace==null){ //数据库中不存在
+        StringBuilder message = new StringBuilder("新增会场");
+        try {
             data = placeService.insertOnePlace(voPlace);
+        } catch (DataAccessException e){
+            //e.printStackTrace();
+            message.append("：名称重复");
         }
         return new ResultResponse()
                 .setData(data)
-                .setMessage("新增会场");
+                .setMessage(message.toString());
     }
 
     @GetMapping("/deleteOnePlace")
@@ -49,14 +54,16 @@ public class PlaceController {
     public ResultResponse updateOnePlace(@RequestBody VoPlace voPlace){
         System.out.println("voPlace = " + voPlace);
         Boolean data = false;
-        VoPlace dbPlace = placeService.selectOnePlaceByName(voPlace.getName());
-        //查询数据库中是否已经存在该会场名
-        if (dbPlace==null){ //数据库中不存在
+        StringBuilder message = new StringBuilder("修改会场");
+        try {
             data = placeService.updateOnePlace(voPlace);
+        } catch (DataAccessException e){
+//            e.printStackTrace();
+            message.append("：名称重复");
         }
         return new ResultResponse()
                 .setData(data)
-                .setMessage("修改会场");
+                .setMessage(message.toString());
     }
 
     @GetMapping("/selectAllPlace")

@@ -2,6 +2,7 @@ package com.fangaoxs.lotteryserver.controller;
 
 import com.fangaoxs.lotteryserver.vo.ResultResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class IndexController {
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public ResultResponse index(){
         return new ResultResponse()
                 .setMessage("这是lottery-server服务器")

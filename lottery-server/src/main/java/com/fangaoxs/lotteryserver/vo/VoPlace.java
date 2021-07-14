@@ -28,14 +28,14 @@ public class VoPlace implements Serializable {
 
     private String address;
 
-    private Date time;
+//    private Date time;
 
     public VoPlace(Place place){
         this.id = place.getId();
         this.uuid = place.getUuid();
         this.name = place.getName();
         this.address = place.getAddress();
-        this.time = place.getTime();
+//        this.time = place.getTime();
     }
 
 }

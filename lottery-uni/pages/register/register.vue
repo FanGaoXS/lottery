@@ -1,53 +1,50 @@
 <template>
 	<view class="page-container">
 		<u-top-tips ref="uTips"></u-top-tips>
-		<view class="info-container">
-			<!-- 用户头像 -->
-			<view class="avatar-container">
-				<u-avatar mode="square" :src="userInfo.avatarUrl"></u-avatar>
+		<u-no-network></u-no-network>
+		<u-card margin="300rpx 80rpx 0 80rpx" padding="50" :show-head="false" :show-foot="false">
+			<view class="info-container" slot="body">
+				<!-- 用户头像 -->
+				<view class="avatar-container">
+					<u-avatar mode="square" :src="userInfo.avatarUrl"></u-avatar>
+				</view>
+				<!-- 用户微信昵称 -->
+				<view class="name-container">
+					<text>{{userInfo.nickName}}</text>
+				</view>
+				<view class="name-container">
+					<text>{{registerInfo.place.name}}</text>
+				</view>
+				<view class="name-container">
+					<text>{{registerInfo.place.address}}</text>
+				</view>
+				<view class="name-container">
+					<text>{{registerInfo.time | timeFilter}}</text>
+				</view>
+				<!-- 登记状态 -->
+				<view class="status-container">
+					<u-icon
+						v-show="isRegister"
+						name="checkmark-circle-fill"
+						color="green"
+						size="80"
+						label="已登记"
+						label-size="40"
+						label-color="green"></u-icon>
+					<text v-show="!isRegister">您还未登记</text>
+				</view>
+				<view v-show="!isRegister" class="button-container">
+					<u-button 
+						size="medium"
+						:disabled="isRegister"
+						@click="handleGetUserProfile"
+						type="primary">
+						点击登记
+					</u-button>
+				</view>
 			</view>
-			<!-- 用户微信昵称 -->
-			<view class="name-container">
-				<text>{{userInfo.nickName}}</text>
-			</view>
-			<view class="name-container">
-				<text>{{registerInfo.place.name}}</text>
-			</view>
-			<view class="name-container">
-				<text>{{registerInfo.place.address}}</text>
-			</view>
-			<view class="name-container">
-				<text>{{registerInfo.time | timeFilter}}</text>
-			</view>
-			<!-- 登记状态 -->
-			<view class="status-container">
-				<u-icon
-					v-show="isRegister"
-					name="checkmark-circle-fill"
-					color="green"
-					size="80"
-					label="已登记"
-					label-size="40"
-					label-color="green"></u-icon>
-				<u-icon
-					v-show="!isRegister"
-					name="close-circle-fill"
-					color="red"
-					size="80"
-					label="未登记"
-					label-size="40"
-					label-color="red"></u-icon>
-			</view>
-		</view>
-		<view v-show="!isRegister" class="button-container">
-			<u-button 
-				size="medium"
-				:disabled="isRegister"
-				@click="handleGetUserProfile"
-				type="primary">
-				点击登记
-			</u-button>
-		</view>
+		</u-card>
+		
 	</view>
 </template>
 
@@ -81,11 +78,6 @@
 				isRegister(this.userInfo,this.placeId).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
 					console.log(res.data?'已登记':'未登记');
 					this.isRegister = (res.data?true:false)
-					if(res.data){
-						this.registerInfo.time = res.data.time;
-						this.registerInfo.place.name = res.data.place.name
-						this.registerInfo.place.address = res.data.place.address
-					}
 				})
 			}
 		},
@@ -125,11 +117,7 @@
 						isRegister(that.userInfo,that.placeId).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
 							console.log(res.data?'已登记':'未登记');
 							that.isRegister = (res.data?true:false)
-							if(res.data){ //true表示已登记
-								that.registerInfo.time = res.data.time;
-								that.registerInfo.place.name = res.data.place.name
-								that.registerInfo.place.address = res.data.place.address
-							} else {
+							if(!res.data){ //false表示未登记
 								that.handleRegisterUser() //往后端登记用户
 							}
 						})
@@ -142,13 +130,14 @@
 			},
 			handleRegisterUser(){
 				registerUser(this.userInfo,this.placeId).then(res=>{ //后端响应成功
+					//res.data返回true或者false
 					console.log(res.data?'登记成功':'登记失败');
+					this.isRegister = (res.data?true:false)
 					this.$refs.uTips.show({
 						title: res.data?'登记成功':'登记失败',
 						type: res.data?'success':'error',
 						duration: '2000'
 					})
-					this.isRegister = res.data
 				}).catch(error=>{ //后端响应失败
 					console.log('登记错误->',error);
 					this.$refs.uTips.show({
@@ -158,17 +147,31 @@
 					})
 				})
 			},
-		}
+		},
+		watch: {
+			isRegister(newValue, oldValue) {
+				// console.log("newValue: ",newValue);
+				if(newValue){ //如果isRegister为true
+					isRegister(this.userInfo,this.placeId).then(res=>{ //保险起见仍然需要从后端数据库中查询是否登记
+						this.registerInfo.time = res.data.time;
+						this.registerInfo.place.name = res.data.place.name;
+						this.registerInfo.place.address = res.data.place.address;
+					})
+				}
+			}
+		},
 	}
 </script>
 
 <style>
-	.page-container {
-		margin-left: 20rpx;
-		margin-right: 20rpx;
+	
+	page{
+		background-size:750rpx;
+		background-image: url('~@/static/cow3.webp');
 	}
+	
 	.info-container {
-		margin-top: 400rpx;
+		margin: 100rpx 0 100rpx 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

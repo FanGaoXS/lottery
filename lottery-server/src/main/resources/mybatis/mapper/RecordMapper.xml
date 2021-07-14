@@ -102,6 +102,16 @@
         VALUES
             (#{uuid},#{time},#{userId},#{prizeId},#{placeId})
     </insert>
+    <insert id="insertBatch"
+            keyProperty="id"
+            useGeneratedKeys="true">
+        INSERT INTO record
+            (uuid,time,userId,prizeId,placeId)
+        VALUES
+        <foreach collection="recordList" item="item" index="index" separator=",">
+            (#{item.uuid},#{item.time},#{item.userId},#{item.prizeId},#{item.placeId})
+        </foreach>
+    </insert>
     <!--删除一条记录-->
     <delete id="deleteOne"
             parameterType="com.fangaoxs.lotteryserver.pojo.Record">
