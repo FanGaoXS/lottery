@@ -4,6 +4,9 @@ import com.fangaoxs.lotteryserver.service.PrizeService;
 import com.fangaoxs.lotteryserver.vo.ResultResponse;
 import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoPrize;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @Date: 2021/07/14/12:29
  * @Description:
  */
+@Api(tags = "奖项接口")
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/prize")
@@ -22,8 +26,9 @@ public class PrizeController {
     @Autowired
     private PrizeService prizeService;
 
+    @ApiOperation("新增一个奖项并且携带会场编号（data返回Boolean）")
     @PostMapping("/insertOnePrizeWithPlaceId")
-    public ResultResponse insertOnePrizeWithPlaceId(@RequestBody VoPrize voPrize){
+    public ResultResponse insertOnePrizeWithPlaceId(@ApiParam("prize对象") @RequestBody VoPrize voPrize){
         System.out.println("voPrize = " + voPrize);
         Boolean data = false;
         StringBuilder message = new StringBuilder("会场新增奖项");
@@ -38,8 +43,9 @@ public class PrizeController {
                 .setMessage(message.toString());
     }
 
+    @ApiOperation("删除一个奖项（data返回Boolean）")
     @GetMapping("/deleteOnePrize")
-    public ResultResponse deleteOnePrize(@RequestParam("id")Integer id){
+    public ResultResponse deleteOnePrize(@ApiParam("奖项编号") @RequestParam("id")Integer id){
         System.out.println("id = " + id);
         Boolean data = prizeService.deleteOnePrize(id);
         return new ResultResponse()
@@ -47,8 +53,9 @@ public class PrizeController {
                 .setMessage("会场移除该奖项（并非中奖）");
     }
 
+    @ApiOperation("修改一个奖项（data返回Boolean）")
     @PostMapping("/updateOnePrize")
-    public ResultResponse updateOnePrize(@RequestBody VoPrize voPrize){
+    public ResultResponse updateOnePrize(@ApiParam("prize对象") @RequestBody VoPrize voPrize){
         System.out.println("voPrize = " + voPrize);
         Boolean data = false;
         StringBuilder message = new StringBuilder("修改奖项");
@@ -69,9 +76,10 @@ public class PrizeController {
                 .setMessage(message.toString());
     }
 
+    @ApiOperation("新增一个奖项的排序号（data返回Boolean）")
     @GetMapping("/updateOnePrizeIdx")
-    public ResultResponse updateOnePrizeIdx(@RequestParam("id")Integer id,
-                                            @RequestParam("idx")Integer idx){
+    public ResultResponse updateOnePrizeIdx(@ApiParam("奖项编号") @RequestParam("id")Integer id,
+                                            @ApiParam("奖项的排序号修改为") @RequestParam("idx")Integer idx){
         System.out.println("id = " + id + ", idx = " + idx);
         Boolean data = prizeService.updateOnePrizeIdx(id, idx);
         return new ResultResponse()
@@ -79,10 +87,11 @@ public class PrizeController {
                 .setMessage("修改奖项排序号");
     }
 
+    @ApiOperation("根据会场编号查询该会场的所有奖项（可分页）")
     @GetMapping("/selectListPrizeByPlaceId")
-    public ResultResponse selectListPrizeByPlaceId(@RequestParam("placeId")Integer placeId,
-                                                   Integer currentPage,
-                                                   Integer pageSize){
+    public ResultResponse selectListPrizeByPlaceId(@ApiParam("会场编号") @RequestParam("placeId")Integer placeId,
+                                                   @ApiParam("当前页（从1开始）") Integer currentPage,
+                                                   @ApiParam("每页记录数") Integer pageSize){
         System.out.println("placeId = " + placeId + ", currentPage = " + currentPage + ", pageSize = " + pageSize);
         VoList<VoPrize> voList = prizeService.selectListPrizeByPlaceId(placeId, currentPage, pageSize);
         return new ResultResponse()
@@ -90,8 +99,9 @@ public class PrizeController {
                 .setMessage("查询会场的奖项");
     }
 
+    @ApiOperation("根据奖项编号查询具体奖项")
     @GetMapping("/selectOnePrizeById")
-    public ResultResponse selectOnePrizeById(@RequestParam("id")Integer id){
+    public ResultResponse selectOnePrizeById(@ApiParam("奖项编号") @RequestParam("id")Integer id){
         System.out.println("id = " + id);
         VoPrize voPrize = prizeService.selectOnePrizeById(id);
         return new ResultResponse()

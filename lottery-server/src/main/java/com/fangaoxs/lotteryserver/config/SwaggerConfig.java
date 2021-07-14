@@ -2,6 +2,7 @@ package com.fangaoxs.lotteryserver.config;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -23,12 +24,16 @@ import java.util.ArrayList;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
     @Bean
     public Docket docket(@Qualifier("apiInfo") ApiInfo apiInfo){
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo)
                 //开启Swagger，默认是false
-                .enable(true)
+                .enable(!activeProfile.equals("prod"))
                 .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
                 //扫描所有接口
                 //.apis(RequestHandlerSelectors.any())
