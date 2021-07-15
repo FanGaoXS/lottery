@@ -16,11 +16,11 @@ import java.util.List;
 @Service
 public interface PlaceService {
 
-    Boolean insertOnePlace(VoPlace voPlace);
+    VoPlace insertOnePlace(VoPlace voPlace);
 
     Boolean deleteOnePlace(Integer placeId);
 
-    Boolean updateOnePlace(VoPlace voPlace);
+    VoPlace updateOnePlace(VoPlace voPlace);
 
     VoList<VoPlace> selectAllPlace();
 

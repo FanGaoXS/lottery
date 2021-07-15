@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public Boolean insertOneUserWithPlaceId(VoUser voUser) {
+    public VoUser insertOneUserWithPlaceId(VoUser voUser) {
         User user = new User();
         user.setUuid(UUID.randomUUID().toString());
         user.setName(voUser.getName());
@@ -35,7 +35,10 @@ public class UserServiceImpl implements UserService {
 //        user.setPhone();
         user.setTime(new Date());
         user.setPlaceId(voUser.getPlaceId());
-        return userMapper.insertOne(user) > 0;
+        if (userMapper.insertOne(user) > 0){
+            return selectOneUserById(user.getId());
+        }
+        return null;
     }
 
     @Override

@@ -27,17 +27,22 @@ public class PrizeServiceImpl implements PrizeService {
     private PrizeMapper prizeMapper;
 
     @Override
-    public Boolean insertOnePrizeWithPlaceId(VoPrize voPrize) {
+    public VoPrize insertOnePrizeWithPlaceId(VoPrize voPrize) {
         Prize prize = new Prize();
         prize.setUuid(UUID.randomUUID().toString());
-        prize.setIdx(0);
+        Prize prize1 = new Prize();
+        prize1.setPlaceId(voPrize.getPlaceId());
+        prize.setIdx((prizeMapper.count(prize1).intValue())+1); //默认排序号为当前会场的奖项记录数+1
         prize.setName(voPrize.getName());
         prize.setAmount(voPrize.getAmount());
         prize.setBalance(voPrize.getAmount());  //初始容量和余额应该一致
         prize.setDescription(voPrize.getDescription());
         prize.setTime(new Date());
         prize.setPlaceId(voPrize.getPlaceId());
-        return prizeMapper.insertOne(prize) > 0;
+        if (prizeMapper.insertOne(prize) > 0){
+            return selectOnePrizeById(prize.getId());
+        }
+        return null;
     }
 
     @Override
@@ -48,22 +53,18 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
-    public Boolean updateOnePrize(VoPrize voPrize) {
+    public VoPrize updateOnePrize(VoPrize voPrize) {
         Prize prize = new Prize();
         prize.setId(voPrize.getId());
+        prize.setIdx(voPrize.getIdx());
         prize.setName(voPrize.getName());
         prize.setAmount(voPrize.getAmount());
         prize.setBalance(voPrize.getBalance());
         prize.setDescription(voPrize.getDescription());
-        return prizeMapper.updateOne(prize)>0;
-    }
-
-    @Override
-    public Boolean updateOnePrizeIdx(Integer id, Integer idx) {
-        Prize prize = new Prize();
-        prize.setId(id);
-        prize.setIdx(idx);
-        return prizeMapper.updateOne(prize)>0;
+        if (prizeMapper.updateOne(prize)>0){
+            return selectOnePrizeById(prize.getId());
+        }
+        return null;
     }
 
     @Override

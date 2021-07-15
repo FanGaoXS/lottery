@@ -16,6 +16,14 @@
 				"enablePullDownRefresh": false,
 				"disableScroll": true
 			}
+		},
+		{
+			"path" : "pages/register/success",
+			"style" :{
+				"navigationBarTitleText": "登记成功",
+				"enablePullDownRefresh": true,
+				"disableScroll": true
+			}
 		}
 	],
 	"globalStyle": {
@@ -30,7 +38,12 @@
 			{
 				"name": "扫码登记页面", //模式名称
 				"path": "pages/register/register", //启动页面，必选
-				"query": "placeId=70" //启动参数，在页面的onLoad函数里面得到
+				"query": "placeId=64" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "登记成功页面", //模式名称
+				"path": "pages/register/success", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
 			}
 		]
 	}

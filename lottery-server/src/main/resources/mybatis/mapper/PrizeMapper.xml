@@ -139,7 +139,7 @@
             <include refid="selectCondition"></include>
         </trim>
         ORDER BY
-            pr.id
+            pr.idx,pr.id
         <trim prefix="LIMIT">
             <include refid="limitCondition"></include>
         </trim>

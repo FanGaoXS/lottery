@@ -14,13 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface PrizeService {
 
-    Boolean insertOnePrizeWithPlaceId(VoPrize voPrize);
+    VoPrize insertOnePrizeWithPlaceId(VoPrize voPrize);
 
     Boolean deleteOnePrize(Integer id);
 
-    Boolean updateOnePrize(VoPrize voPrize);
-
-    Boolean updateOnePrizeIdx(Integer id,Integer idx);
+    VoPrize updateOnePrize(VoPrize voPrize);
 
     VoList<VoPrize> selectAllPrize();
 

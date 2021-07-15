@@ -7,7 +7,7 @@ import request from '@/utils/request.js'
 export function registerUser(user,placeId){
 	return request({
 		method: 'POST',
-		url: 'lottery-server/user/insertOneUser',
+		url: 'lottery-server/user/insertOneUserWithPlaceId',
 		data: {
 			name: user.nickName.trim(),
 			avatar: user.avatarUrl,
@@ -20,12 +20,12 @@ export function registerUser(user,placeId){
  * @param {Object} user
  * 根据昵称和会场编号查询用户是否登记
  */
-export function isRegister(user,placeId){
+export function getRegister(nickName,placeId){
 	return request({
 		method: 'GET',
 		url: 'lottery-server/user/selectOneUserByNameWithPlaceId',
 		params: {
-			name: user.nickName,
+			name: nickName,
 			placeId
 		}
 	})
@@ -33,13 +33,13 @@ export function isRegister(user,placeId){
 
 /**
  * @param {Object} id
- * 根据登记编号查询该用户的登记信息
+ * 根据具体编号查询用户的登记信息
  */
-export function getRegister(id){
+export function getRegisterById(id){
 	return request({
 		method: 'GET',
 		url: 'lottery-server/user/selectOneUserById',
-		params: {
+		params:{
 			id
 		}
 	})

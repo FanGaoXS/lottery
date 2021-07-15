@@ -27,13 +27,16 @@ public class PlaceServiceImpl implements PlaceService {
     private PlaceMapper placeMapper;
 
     @Override
-    public Boolean insertOnePlace(VoPlace voPlace) {
+    public VoPlace insertOnePlace(VoPlace voPlace) {
         Place place = new Place();
         place.setUuid(UUID.randomUUID().toString());
         place.setName(voPlace.getName());
         place.setAddress(voPlace.getAddress());
         place.setTime(new Date());
-        return placeMapper.insertOne(place) > 0 ;
+        if (placeMapper.insertOne(place) > 0){
+            return new VoPlace(place);
+        }
+        return null;
     }
 
     @Override
@@ -44,12 +47,16 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Boolean updateOnePlace(VoPlace voPlace) {
+    public VoPlace updateOnePlace(VoPlace voPlace) {
         Place place = new Place();
         place.setId(voPlace.getId());
         place.setName(voPlace.getName());
         place.setAddress(voPlace.getAddress());
-        return placeMapper.updateOne(place) > 0 ;
+        if (placeMapper.updateOne(place) > 0 ){
+            Place dbPlace = placeMapper.selectOne(place);
+            return new VoPlace(dbPlace);
+        }
+        return null;
     }
 
     @Override

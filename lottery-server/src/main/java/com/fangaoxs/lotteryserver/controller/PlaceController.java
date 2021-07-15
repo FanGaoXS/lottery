@@ -29,11 +29,11 @@ public class PlaceController {
     @Autowired
     private PlaceService placeService;
 
-    @ApiOperation("新增一个会场（data返回Boolean）")
+    @ApiOperation("新增一个会场")
     @PostMapping("/insertOnePlace")
     public ResultResponse insertOnePlace(@ApiParam("place对象") @RequestBody VoPlace voPlace){
-        System.out.println("voPlace = " + voPlace);
-        Boolean data = false;
+//        System.out.println("voPlace = " + voPlace);
+        Object data = null;
         StringBuilder message = new StringBuilder("新增会场");
         try {
             data = placeService.insertOnePlace(voPlace);
@@ -49,18 +49,18 @@ public class PlaceController {
     @ApiOperation("删除一个会场（data返回Boolean）")
     @GetMapping("/deleteOnePlace")
     public ResultResponse deleteOnePlace(@ApiParam("会场编号")@RequestParam("id")Integer placeId){
-        System.out.println("placeId = " + placeId);
+//        System.out.println("placeId = " + placeId);
         Boolean data = placeService.deleteOnePlace(placeId);
         return new ResultResponse()
                 .setData(data)
                 .setMessage("删除会场");
     }
 
-    @ApiOperation("修改一个会场（data返回Boolean）")
+    @ApiOperation("修改一个会场")
     @PostMapping("/updateOnePlace")
     public ResultResponse updateOnePlace(@ApiParam("place对象")@RequestBody VoPlace voPlace){
-        System.out.println("voPlace = " + voPlace);
-        Boolean data = false;
+//        System.out.println("voPlace = " + voPlace);
+        Object data = null;
         StringBuilder message = new StringBuilder("修改会场");
         try {
             data = placeService.updateOnePlace(voPlace);
@@ -86,7 +86,7 @@ public class PlaceController {
     @GetMapping("/selectListPlace")
     public ResultResponse selectListPlace(@ApiParam(value = "当前页")Integer currentPage,
                                           @ApiParam(value = "每页记录数")Integer pageSize){
-        System.out.println("currentPage = " + currentPage + ", pageSize = " + pageSize);
+//        System.out.println("currentPage = " + currentPage + ", pageSize = " + pageSize);
         VoList<VoPlace> voList = placeService.selectListPlace(currentPage, pageSize);
         return new ResultResponse()
                 .setData(voList)
@@ -96,7 +96,7 @@ public class PlaceController {
     @ApiOperation("根据会场编号查询具体会场")
     @GetMapping("/selectOnePlaceById")
     public ResultResponse selectOnePlace(@ApiParam("会场编号") @RequestParam("id")Integer id){
-        System.out.println("id = " + id);
+//        System.out.println("id = " + id);
         VoPlace voPlace = placeService.selectOnePlaceById(id);
         return new ResultResponse()
                 .setData(voPlace)

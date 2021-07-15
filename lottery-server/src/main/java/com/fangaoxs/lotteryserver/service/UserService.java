@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    Boolean insertOneUserWithPlaceId(VoUser voUser);
+    VoUser insertOneUserWithPlaceId(VoUser voUser);
 
     Boolean deleteOneUser(Integer id);
 

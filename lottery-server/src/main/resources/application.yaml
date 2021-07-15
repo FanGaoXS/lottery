@@ -1,7 +1,7 @@
 #当前启用哪个配置文件
 spring:
   profiles:
-    active: dev
+    active: stage
   application:
     name: lottery-server
 
