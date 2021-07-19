@@ -30,7 +30,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket docket(@Qualifier("apiInfo") ApiInfo apiInfo){
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo)
                 //开启Swagger，默认是false
                 .enable(!activeProfile.equals("prod"))
@@ -55,7 +55,7 @@ public class SwaggerConfig {
         return new ApiInfo(
                 "wqk的swaggerAPI配置文档",
                 "Api接口配置文档",
-                "v1.0",
+                "v1.3",
                 "urn:tos",
                 new Contact("wqk", "", "a954278478@gmail.com"),
                 "Apache 2.0",

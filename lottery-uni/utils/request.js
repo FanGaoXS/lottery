@@ -1,10 +1,28 @@
 // 引入luch-request
 import Request from 'luch-request'
 
+const env = 'dev'
+
+let baseURL = ''
+
+switch(env){
+	case 'dev': 
+		baseURL = 'http://localhost:8080'
+		break;
+	case 'stage':
+		baseURL = 'https://draw.wqkd.blctek.com'
+		break;
+	case 'prod':
+		baseURL = 'http://localhost:8080'
+		break;
+	default:
+		baseURL = 'http://localhost:8080'
+}
+
 const http = new Request();
 
 //全局配置
-http.config.baseURL = 'http://172.16.0.141:8080'
+http.config.baseURL = baseURL
 http.config.timeout = 1000*10
 
 // request拦截器

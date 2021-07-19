@@ -50,7 +50,7 @@ public class PrizeController {
     }
 
     @ApiOperation("删除一个奖项（data返回Boolean）")
-    @GetMapping("/deleteOnePrize")
+    @DeleteMapping("/deleteOnePrize")
     public ResultResponse deleteOnePrize(@ApiParam("奖项编号") @RequestParam("id")Integer id){
 //        System.out.println("id = " + id);
         Boolean data = prizeService.deleteOnePrize(id);

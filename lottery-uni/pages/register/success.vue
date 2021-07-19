@@ -1,15 +1,17 @@
 <template>
 	<view class="page-container">
-		<u-top-tips ref="uTips"></u-top-tips>
+		<u-toast ref="uToast" />
 		<register-page 
 			:title="place.name"
 			:show-foot="true"
 			:show-head="true">
 			<view slot="body" class="body-container">
-				<!-- 微信头像 -->
+
+				<!-- 微信头像组 -->
 				<view class="avatar-container">
-					<u-avatar size="large" mode="square" :src="userInfo.avatar"></u-avatar>
+					<u-avatar size="150" mode="square" :src="userInfo.avatar"></u-avatar>
 				</view>
+				
 				<view class="status-container">
 					<u-icon
 						v-show="isRegister"
@@ -36,13 +38,13 @@
 <script>
 	
 	import {
-		getRegisterById
+		getRegisterById,
+		getUserListByPlaceId
 	} from '@/api/user.js'
 
 	
-	import {
-		registerPage
-	} from './registerPage'
+	import registerPage from './registerPage'
+	import avatarList from './avatarList.vue'
 	
 	
 	export default {
@@ -53,10 +55,14 @@
 			}
 		},
 		components: {
-			registerPage
+			registerPage,
+			avatarList
 		},
 		onLoad({id}) { //页面一加载就获取登记的编号
 			this.id = id
+			this.fetchRegister()
+		},
+		onPullDownRefresh() {
 			this.fetchRegister()
 		},
 		methods: {
@@ -68,9 +74,32 @@
 						this.userInfo.name = res.data.name
 						this.userInfo.avatar = res.data.avatar
 						this.userInfo.time = res.data.time
+						this.place.id = res.data.place.id
 						this.place.name = res.data.place.name
 						this.place.address = res.data.place.address
+					} else { //如果登记失效
+						const that = this
+						this.$refs.uToast.show({
+							title: '您已清除登记',
+							type: 'error',
+							duration: '1000',
+							callback(){
+								that.routerToIndex() //回到首页
+							}
+						})
 					}
+					this.fetchOtherUserList()
+					uni.stopPullDownRefresh()
+				})
+			},
+			async fetchOtherUserList(){
+				const { data } = await getUserListByPlaceId(this.place.id)
+				this.otherUserList = data.items
+			},
+			routerToIndex(){
+				this.$u.route({
+					type: 'reLaunch',
+					url: 'pages/index/index'
 				})
 			}
 		},
@@ -84,9 +113,11 @@
 					time: undefined
 				},
 				place: {
+					id: undefined,
 					name: '',
 					address: ''
-				}
+				},
+				otherUserList:[]
 			}
 		},
 	}
@@ -98,6 +129,9 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+	}
+	.other-avatar-container{
+		margin-bottom: 50rpx;
 	}
 	.status-container {
 		margin-top: 100rpx;

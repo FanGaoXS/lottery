@@ -1,5 +1,5 @@
 {
-    "name" : "lottery-uni",
+    "name" : "draw-uni",
     "appid" : "__UNI__5C520DE",
     "description" : "",
     "versionName" : "1.0.0",
@@ -54,7 +54,7 @@
         "setting" : {
             "urlCheck" : false,
             "minified" : true,
-            "postcss" : false
+            "postcss" : true
         },
         "usingComponents" : true
     },

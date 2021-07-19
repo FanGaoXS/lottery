@@ -1,13 +1,13 @@
 <script>
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			console.log('App打开')
 		},
 		onShow: function() {
-			console.log('App Show')
+			console.log('App前台显示')
 		},
 		onHide: function() {
-			console.log('App Hide')
+			console.log('App后台挂起')
 		}
 	}
 </script>

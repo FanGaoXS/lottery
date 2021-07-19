@@ -2,12 +2,12 @@
 	<view>
 		<u-no-network></u-no-network>
 		<u-card 
-			margin="300rpx 80rpx 0 80rpx" 
+			margin="200rpx 80rpx 0 80rpx" 
 			box-shadow="2px 2px 3px #aaaaaa"
 			:show-head="showHead" 
 			:show-foot="showFoot"
 			:title="title"
-			title-size="45"
+			title-size="35"
 			padding="50" >
 			<view class="card-body" slot="body">
 				<slot name="body"></slot>
@@ -49,10 +49,6 @@
 	
 	.card-body{
 		margin: 100rpx 0 100rpx 0;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
 	}
 	
 	.card-foot{

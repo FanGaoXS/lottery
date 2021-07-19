@@ -44,3 +44,17 @@ export function getRegisterById(id){
 		}
 	})
 }
+
+/**
+ * @param {Object} placeId
+ * 根据会场编号查询其他用户
+ */
+export function getUserListByPlaceId(placeId){
+	return request({
+		method: 'GET',
+		url: 'lottery-server/user/selectListUserByPlaceId',
+		params:{
+			placeId
+		}
+	})
+}

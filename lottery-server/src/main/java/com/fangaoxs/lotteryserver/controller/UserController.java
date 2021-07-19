@@ -1,5 +1,6 @@
 package com.fangaoxs.lotteryserver.controller;
 
+import com.fangaoxs.lotteryserver.service.PlaceService;
 import com.fangaoxs.lotteryserver.service.UserService;
 import com.fangaoxs.lotteryserver.vo.ResultResponse;
 import com.fangaoxs.lotteryserver.vo.VoList;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PlaceService placeService;
 
     @ApiOperation("新增一个登记用户")
     @PostMapping("/insertOneUserWithPlaceId")
@@ -35,13 +38,18 @@ public class UserController {
         if (voUser.getPlaceId()==null){ //没有录入会场则登记失败
             message.append("：需要绑定会场");
             return new ResultResponse()
-                    .setData(false)
+                    .setData(null)
+                    .setMessage(message.toString());
+        } else if (placeService.selectOnePlaceById(voUser.getPlaceId())==null){ //根据placeId查询是否存在place
+            message.append("：需要绑定正确的会场");
+            return new ResultResponse()
+                    .setData(null)
                     .setMessage(message.toString());
         }
         try {
             data = userService.insertOneUserWithPlaceId(voUser);
         } catch (DataAccessException e){
-//            e.printStackTrace();
+            e.printStackTrace();
             message.append("：昵称重复");
         }
         return new ResultResponse()
@@ -50,7 +58,7 @@ public class UserController {
     }
 
     @ApiOperation("删除一个登记用户（data返回Boolean）")
-    @GetMapping("/deleteOneUser")
+    @DeleteMapping("/deleteOneUser")
     public ResultResponse deleteOneUser(@ApiParam("user编号") @RequestParam("id")Integer id){
 //        System.out.println("id = " + id);
         Boolean data = userService.deleteOneUser(id);

@@ -30,16 +30,28 @@
 		getInfo
 	} from '@/utils/info.js'
 	
+	import {
+		getQRCodeQueryParam
+	} from '@/utils/url-params.js'
+	
 	export default{
-		onLoad({placeId}) {
-			console.log("会场编号: ",placeId);
-			this.placeId = placeId
-			if(this.isUserInfo()){ //storage中存在userInfo
-				this.isRegister().then(res=>{
-					if(res.data!==null){ //res.data有数据表示已经登录过
-						this.routerToSuccess(res.data) //跳转到登录成功页
-					}
-				})
+		 async onLoad({placeId,q}) {
+			console.log('页面参数placeId->',placeId);
+			console.log('二维码参数q->',q);
+			if(placeId!==undefined){ 		//如果直接从页面进入
+				this.placeId = placeId
+			} else if(q!==undefined){		//如果通过扫码二维码进入（需要从options.q中获取placeId参数）
+				this.placeId = getQRCodeQueryParam(decodeURIComponent(q),'placeId') 
+			}
+			console.log('会场编号->',this.placeId);
+			console.log('存储中存在用户个人信息->',this.isUserInfo);
+			if(this.isUserInfo){ //storage中存在userInfo
+				const { data } = await getRegister(this.userInfo.nickName,this.placeId)
+				if(data!==null){
+					this.isRegister = true
+					this.routerToSuccess(data)
+				}
+				console.log('用户是否已经登记->',this.isRegister);
 			}
 		},
 		components: {
@@ -48,17 +60,27 @@
 		methods: {
 			handleRegisterButton() {
 				this.buttonLoading = true
-				if(this.isUserInfo()){
+				if(this.isUserInfo){
 					this.handleRegisterUser()
 				} else {
 					const that = this
 					uni.getUserProfile({
 						desc: '需要获取用户昵称和头像',
-						success({userInfo}) {
+						success(e) {
+							console.log('getUserProfile->',e);
+							const { userInfo } = e
 							//获取用户个人信息成功
 							console.log('从微信服务器获取用户个人信息成功->',userInfo);
 							that.handleUserInfo(userInfo) //将userInfo放置到stroage
-							that.handleRegisterUser() //登记用户
+							getRegister(that.userInfo.nickName,that.placeId).then(res=>{
+								if(res.data!=null){ //说明用户上次已经登记
+									that.isRegister = true
+									that.routerToSuccess(res.data) //跳转到登记成功页
+								} else {
+									that.handleRegisterUser() //登记用户
+								}
+							})
+							
 						},
 						fail(e) {
 							//获取用户个人信息失败
@@ -77,16 +99,16 @@
 				this.buttonLoading = true
 				registerUser(this.userInfo,this.placeId).then(res=>{//res.data返回登录成功的数据或者null
 					const that = this
-					console.log(res.data?'登记成功':'登记失败',res);
+					console.log(res.data?'首次登记成功':'首次登记失败',res);
 					this.$refs.uToast.show({
-						title: res.data?'登记成功':'登记失败',
+						title: res.data?'首次登记成功':'首次登记失败',
 						type: res.data?'success':'error',
-						duration: '500',
+						duration: '1000',
 						callback(){
 							if(res.data!==null){
 								that.routerToSuccess(res.data)
-								that.buttonLoading = false
 							}
+							that.buttonLoading = false
 						}
 					})
 				}).catch(error=>{
@@ -98,12 +120,6 @@
 					})
 					this.buttonLoading = false
 				})
-			},
-			isUserInfo(){ //storage存在userInfo返回true，否则返回false
-				return !getInfo()=='';
-			},
-			isRegister(){ 
-				return getRegister(this.userInfo.nickName,this.placeId)
 			},
 			routerToSuccess(registerInfo){
 				this.$u.route({
@@ -129,7 +145,9 @@
 				userInfo:{
 					nickName: getInfo().nickName,
 					avatarUrl: getInfo().avatarUrl
-				}
+				},
+				isUserInfo: !getInfo()=='',
+				isRegister: false
 			}
 		},
 	}

@@ -47,7 +47,7 @@ public class PlaceController {
     }
 
     @ApiOperation("删除一个会场（data返回Boolean）")
-    @GetMapping("/deleteOnePlace")
+    @DeleteMapping("/deleteOnePlace")
     public ResultResponse deleteOnePlace(@ApiParam("会场编号")@RequestParam("id")Integer placeId){
 //        System.out.println("placeId = " + placeId);
         Boolean data = placeService.deleteOnePlace(placeId);

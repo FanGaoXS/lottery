@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService {
             User dbUser = userMapper.selectOne(user);
             return new VoUser(dbUser);
         } catch (NullPointerException e){
+            e.printStackTrace();
             return null;
         }
     }
