@@ -2,6 +2,8 @@
 	export default {
 		onLaunch: function() {
 			console.log('App打开')
+			const appVersion = 'v1.0.8'
+			console.log('App版本号->',appVersion);
 		},
 		onShow: function() {
 			console.log('App前台显示')

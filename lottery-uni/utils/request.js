@@ -1,7 +1,7 @@
 // 引入luch-request
 import Request from 'luch-request'
 
-const env = 'stage'
+const env = 'prod'
 
 let baseURL = ''
 
@@ -13,7 +13,7 @@ switch(env){
 		baseURL = 'https://draw.wqkd.blctek.com'
 		break;
 	case 'prod':
-		baseURL = 'http://localhost:8080'
+		baseURL = 'https://draw.wqkd.blctek.com:8443'
 		break;
 	default:
 		baseURL = 'http://localhost:8080'
@@ -28,6 +28,7 @@ http.config.timeout = 1000*10
 // request拦截器
 http.interceptors.request.use(config=>{
 	// request成功发出前做处理
+	console.log(config);
 	return config
 },error=>{
 	console.log('request拦截器错误->',error);
