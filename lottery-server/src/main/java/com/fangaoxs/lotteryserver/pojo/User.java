@@ -37,6 +37,11 @@ public class User extends Page {
     private String avatar;
 
     /**
+     * 用户名和头像共同MD5
+     */
+    private String md5;
+
+    /**
      * 用户联系方式
      */
     private String phone;

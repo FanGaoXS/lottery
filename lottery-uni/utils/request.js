@@ -1,13 +1,13 @@
 // 引入luch-request
 import Request from 'luch-request'
 
-const env = 'dev'
+const env = 'stage'
 
 let baseURL = ''
 
 switch(env){
 	case 'dev': 
-		baseURL = 'http://localhost:8080'
+		baseURL = 'http://172.16.0.141:8080'
 		break;
 	case 'stage':
 		baseURL = 'https://draw.wqkd.blctek.com'

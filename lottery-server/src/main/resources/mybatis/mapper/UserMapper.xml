@@ -8,6 +8,7 @@
         u.uuid                  AS uUuid,
         u.name                  AS uName,
         u.avatar                AS uAvatar,
+        u.md5                   AS uMd5,
         u.phone                 AS uPhone,
         u.time                  AS uTime,
         u.placeId               AS uPlaceId
@@ -25,6 +26,9 @@
         </if>
         <if test=" avatar!=null and avatar!='' ">
             AND u.avatar = #{avatar}
+        </if>
+        <if test=" md5!=null and md5!='' ">
+            AND u.md5 = #{md5}
         </if>
         <if test=" phone!=null and phone!='' ">
             AND u.phone = #{phone}
@@ -46,6 +50,9 @@
         </if>
         <if test=" avatar!=null and avatar!='' ">
             avatar = #{avatar},
+        </if>
+        <if test=" md5!=null and md5!='' ">
+            md5 = #{md5},
         </if>
         <if test=" phone!=null and phone!='' ">
             phone = #{phone},
@@ -71,6 +78,7 @@
         <result column="uUuid" property="uuid"/>
         <result column="uName" property="name"/>
         <result column="uAvatar" property="avatar"/>
+        <result column="uMd5" property="md5"/>
         <result column="uPhone" property="phone"/>
         <result column="uTime" property="time"/>
         <result column="uPlaceId" property="placeId"/>
@@ -88,9 +96,9 @@
             useGeneratedKeys="true"
             parameterType="com.fangaoxs.lotteryserver.pojo.User">
         INSERT INTO user
-            (uuid,name,avatar,phone,time,placeId)
+            (uuid,name,avatar,md5,phone,time,placeId)
         VALUES
-            (#{uuid},#{name},#{avatar},#{phone},#{time},#{placeId})
+            (#{uuid},#{name},#{avatar},#{md5},#{phone},#{time},#{placeId})
     </insert>
     <!--删除一条记录-->
     <delete id="deleteOne"

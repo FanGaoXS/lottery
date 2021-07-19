@@ -36,6 +36,8 @@ public interface UserService {
 
     VoUser selectOneUserByNameWithPlaceId(String name,Integer placeId);
 
+    VoUser selectOneUserByMd5WithPlaceId(String md5,Integer placeId);
+
     VoUser selectOneUserById(Integer id);
 
 }

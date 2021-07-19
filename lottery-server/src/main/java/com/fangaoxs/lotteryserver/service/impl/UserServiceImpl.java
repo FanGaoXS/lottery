@@ -3,6 +3,7 @@ package com.fangaoxs.lotteryserver.service.impl;
 import com.fangaoxs.lotteryserver.mapper.UserMapper;
 import com.fangaoxs.lotteryserver.pojo.User;
 import com.fangaoxs.lotteryserver.service.UserService;
+import com.fangaoxs.lotteryserver.utils.MD5Utils;
 import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
         user.setUuid(UUID.randomUUID().toString());
         user.setName(voUser.getName());
         user.setAvatar(voUser.getAvatar());
+        user.setMd5(MD5Utils.md5NameAndAvatar(voUser.getName(),voUser.getAvatar())); //直接生成md5
 //        user.setPhone();
         user.setTime(new Date());
         user.setPlaceId(voUser.getPlaceId());
@@ -117,6 +119,19 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
+    }
+
+    @Override
+    public VoUser selectOneUserByMd5WithPlaceId(String md5, Integer placeId) {
+        User user = new User();
+        user.setMd5(md5);
+        user.setPlaceId(placeId);
+        try{
+            User dbUser = userMapper.selectOne(user);
+            return new VoUser(dbUser);
+        } catch (NullPointerException e){
+            return null;
+        }
     }
 
     @Override

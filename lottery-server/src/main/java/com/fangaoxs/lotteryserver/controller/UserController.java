@@ -101,4 +101,14 @@ public class UserController {
                 .setData(dbUser)
                 .setMessage("根据会场和昵称查询登记用户");
     }
+
+    @ApiOperation("根据用户临时唯一标识md5和会场编号查询已登记用户")
+    @GetMapping("/selectOneUserByMd5WithPlaceId")
+    public ResultResponse selectOneUserByMd5WithPlaceId(@ApiParam("用户临时唯一标识") @RequestParam("md5")String md5,
+                                                        @ApiParam("会场编号") @RequestParam("placeId")Integer placeId){
+        VoUser dbUser = userService.selectOneUserByMd5WithPlaceId(md5, placeId);
+        return new ResultResponse()
+                .setData(dbUser)
+                .setMessage("根据用户唯一标识和会场编号查询登记用户");
+    }
 }

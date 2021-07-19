@@ -71,6 +71,7 @@
             <result column="uUuid" property="uuid"/>
             <result column="uName" property="name"/>
             <result column="uAvatar" property="avatar"/>
+            <result column="uMd5" property="md5"/>
             <result column="uPhone" property="phone"/>
             <result column="uTime" property="time"/>
         </association>

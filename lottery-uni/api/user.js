@@ -1,4 +1,5 @@
 import request from '@/utils/request.js'
+import { md5NameAndAvatar } from '@/utils/md5.js'
 
 /**
  * @param {Object} user
@@ -26,6 +27,18 @@ export function getRegister(nickName,placeId){
 		url: 'lottery-server/user/selectOneUserByNameWithPlaceId',
 		params: {
 			name: nickName,
+			placeId
+		}
+	})
+}
+
+export function getRegisterByMd5(nickName,avatar,placeId){
+	const md5 = md5NameAndAvatar(nickName,avatar)
+	return request({
+		method: 'GET',
+		url: 'lottery-server/user/selectOneUserByMd5WithPlaceId',
+		params:{
+			md5,
 			placeId
 		}
 	})

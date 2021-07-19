@@ -22,7 +22,8 @@
 	
 	import {
 		registerUser,
-		getRegister
+		getRegister,
+		getRegisterByMd5
 	} from '@/api/user.js'
 	
 	import {
@@ -46,7 +47,7 @@
 			console.log('会场编号->',this.placeId);
 			console.log('存储中存在用户个人信息->',this.isUserInfo);
 			if(this.isUserInfo){ //storage中存在userInfo
-				const { data } = await getRegister(this.userInfo.nickName,this.placeId)
+				const { data } = await getRegisterByMd5(this.userInfo.nickName,this.userInfo.avatarUrl,this.placeId)
 				if(data!==null){
 					this.isRegister = true
 					this.routerToSuccess(data)
@@ -66,13 +67,11 @@
 					const that = this
 					uni.getUserProfile({
 						desc: '需要获取用户昵称和头像',
-						success(e) {
-							console.log('getUserProfile->',e);
-							const { userInfo } = e
+						success({userInfo}) {
 							//获取用户个人信息成功
 							console.log('从微信服务器获取用户个人信息成功->',userInfo);
 							that.handleUserInfo(userInfo) //将userInfo放置到stroage
-							getRegister(that.userInfo.nickName,that.placeId).then(res=>{
+							getRegisterByMd5(that.userInfo.nickName,that.userInfo.avatarUrl,that.placeId).then(res=>{
 								if(res.data!=null){ //说明用户上次已经登记
 									that.isRegister = true
 									that.routerToSuccess(res.data) //跳转到登记成功页
