@@ -27,7 +27,7 @@
 			</view>
 			<view slot="foot" class="foot-container">
 				<view class="time-container">
-					{{userInfo.time | timeFilter }}
+					{{userInfo.time | date('yy/mm/dd hh:MM') }}
 				</view>
 			</view>
 		</register-page>

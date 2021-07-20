@@ -26,4 +26,21 @@ import java.util.*;
 @CrossOrigin("*")
 public class DrawController {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PrizeService prizeService;
+
+    @GetMapping("/makeDraw")
+    public ResultResponse makeDraw(@RequestParam("id")Integer id,
+                                   @RequestParam("number")Integer number){
+        System.out.println("id = " + id + ", number = " + number);
+        VoPrize dbPrize = prizeService.selectOnePrizeById(id);
+        Integer placeId = dbPrize.getPlaceId(); //奖项所属会场编号
+        Integer balance = dbPrize.getBalance(); //奖项余量
+        List<User> userList = userService.selectListUserByPlaceId(placeId);//根据会场编号查询出该会场的已登记用户
+        return null;
+    }
+
 }

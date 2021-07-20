@@ -1,7 +1,7 @@
 // 引入luch-request
 import Request from 'luch-request'
 
-const env = 'prod'
+const env = 'dev'
 
 let baseURL = ''
 
