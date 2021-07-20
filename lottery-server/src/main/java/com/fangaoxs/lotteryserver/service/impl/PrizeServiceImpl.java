@@ -68,6 +68,14 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
+    public Boolean updateOnePrizeBalance(Integer id, int balance) {
+        Prize prize = new Prize();
+        prize.setId(id);
+        prize.setBalance(balance);
+        return prizeMapper.updateOne(prize)>0;
+    }
+
+    @Override
     public VoList<VoPrize> selectAllPrize() {
         Prize prize = new Prize();
         VoList<VoPrize> voList = new VoList<>();

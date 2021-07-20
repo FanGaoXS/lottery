@@ -20,6 +20,8 @@ public interface PrizeService {
 
     VoPrize updateOnePrize(VoPrize voPrize);
 
+    Boolean updateOnePrizeBalance(Integer id,int balance);
+
     VoList<VoPrize> selectAllPrize();
 
     VoList<VoPrize> selectListPrize(Integer currentPage,Integer pageSize);

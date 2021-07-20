@@ -58,7 +58,7 @@
         <if test=" amount!=null and amount!='' ">
             amount = #{amount},
         </if>
-        <if test=" balance!=null and balance!='' ">
+        <if test=" balance!=null and balance!='' or balance ==0 ">
             balance = #{balance},
         </if>
         <if test=" description!=null and description!='' ">
