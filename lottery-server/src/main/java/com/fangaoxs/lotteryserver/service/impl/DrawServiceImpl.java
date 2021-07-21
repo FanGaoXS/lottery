@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,10 +36,17 @@ public class DrawServiceImpl implements DrawService {
     @Autowired
     private PrizeService prizeService;
 
+    /**
+     *
+     * @param userList  抽奖总登记用户集合
+     * @param number    抽奖数量
+     * @param voPrize   奖项对象
+     * @return
+     */
     @Override
     public List<VoUser> makeDraw(List<User> userList, int number, VoPrize voPrize) {
-        List<User> drawUserList = draw(userList, number);
-        List<VoUser> drawVoUserList = new ArrayList<>();
+        List<User> drawUserList = draw(userList, number); //抽中对象集合
+        List<VoUser> drawVoUserList = new ArrayList<>();  //预定义抽中的对象集合
         drawUserList.forEach(user -> drawVoUserList.add(new VoUser(user)));
         try {
             //修改prize表的balance
@@ -69,10 +78,18 @@ public class DrawServiceImpl implements DrawService {
         return resultUserList;
     }
 
+    /**
+     * 将已经中奖的用户集合转为中奖记录集合（便于批量插入进record表）
+     * @param userList
+     * @param prizeId
+     * @return
+     */
     private List<Record> userListToRecordList(List<User> userList,Integer prizeId){
         ArrayList<Record> recordList = new ArrayList<>();
         userList.forEach(user -> {
             Record record = new Record();
+            record.setUuid(UUID.randomUUID().toString());
+            record.setTime(new Date());
             record.setPlaceId(user.getPlaceId());
             record.setUserId(user.getId());
             record.setPrizeId(prizeId);

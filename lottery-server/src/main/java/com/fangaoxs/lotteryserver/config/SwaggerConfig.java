@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class SwaggerConfig {
 
     @Value("${spring.profiles.active}")
-    private String activeProfile;
+    private String activeProfile; // 配置文件中当前环境
 
     @Bean
     public Docket docket(@Qualifier("apiInfo") ApiInfo apiInfo){

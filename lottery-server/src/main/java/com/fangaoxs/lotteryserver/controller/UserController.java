@@ -73,8 +73,6 @@ public class UserController {
                                                   @ApiParam("当前页（从1开始）") Integer currentPage,
                                                   @ApiParam("每页记录数") Integer pageSize){
 //        System.out.println("placeId = " + placeId + ", currentPage = " + currentPage + ", pageSize = " + pageSize);
-        VoUser voUser = new VoUser();
-        voUser.setPlaceId(placeId);
         VoList<VoUser> voList = userService.selectListUserByPlaceId(placeId,currentPage,pageSize);
         return new ResultResponse()
                 .setData(voList)

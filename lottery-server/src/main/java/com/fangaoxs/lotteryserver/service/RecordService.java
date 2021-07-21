@@ -1,6 +1,8 @@
 package com.fangaoxs.lotteryserver.service;
 
 import com.fangaoxs.lotteryserver.pojo.Record;
+import com.fangaoxs.lotteryserver.vo.VoList;
+import com.fangaoxs.lotteryserver.vo.VoRecord;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,13 @@ import java.util.List;
 @Service
 public interface RecordService {
 
-    Boolean insertOneRecord(Record record);
-
     Boolean insertBatchRecord(List<Record> recordList);
 
+    Boolean deleteOneRecord(Integer id);
+
+    VoRecord selectOneRecordById(Integer id);
+
+    VoList<VoRecord> selectListRecordByPlaceId(Integer placeId,Integer currentPage,Integer pageSize);
+
+    VoList<VoRecord> selectListRecordByPrizeId(Integer prizeId,Integer currentPage,Integer pageSize);
 }
