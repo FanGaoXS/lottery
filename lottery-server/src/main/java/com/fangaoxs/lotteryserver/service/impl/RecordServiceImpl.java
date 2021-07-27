@@ -84,6 +84,13 @@ public class RecordServiceImpl implements RecordService {
         return voList;
     }
 
+    @Override
+    public List<Record> selectListRecordByPlaceId(Integer placeId) {
+        Record record = new Record();
+        record.setPlaceId(placeId);
+        return recordMapper.selectList(record);
+    }
+
     private List<VoRecord> getItems(Record record){
         List<VoRecord> items = new ArrayList<>();
         List<Record> recordList = recordMapper.selectList(record);

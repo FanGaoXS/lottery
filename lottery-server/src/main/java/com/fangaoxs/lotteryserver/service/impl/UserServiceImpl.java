@@ -1,10 +1,15 @@
 package com.fangaoxs.lotteryserver.service.impl;
 
 import com.fangaoxs.lotteryserver.mapper.UserMapper;
+import com.fangaoxs.lotteryserver.pojo.Prize;
+import com.fangaoxs.lotteryserver.pojo.Record;
 import com.fangaoxs.lotteryserver.pojo.User;
+import com.fangaoxs.lotteryserver.service.PrizeService;
+import com.fangaoxs.lotteryserver.service.RecordService;
 import com.fangaoxs.lotteryserver.service.UserService;
 import com.fangaoxs.lotteryserver.utils.MD5Utils;
 import com.fangaoxs.lotteryserver.vo.VoList;
+import com.fangaoxs.lotteryserver.vo.VoPrize;
 import com.fangaoxs.lotteryserver.vo.VoUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RecordService recordService;
 
     @Override
     public VoUser insertOneUserWithPlaceId(VoUser voUser) {
@@ -93,12 +101,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> selectListUserByPlaceIdNotPrize(Integer placeId) {
+        List<Record> recordList = recordService.selectListRecordByPlaceId(placeId);     //该会场已中奖记录
+        User user = new User();
+        user.setPlaceId(placeId);
+        List<User> userList = userMapper.selectList(user);                              //该会场已经登记用户
+        for (int i = 0; i < recordList.size(); i++) {
+            Record record = recordList.get(i);
+            for (int j = 0; j < userList.size(); j++) {
+                User dbUser = userList.get(j);
+                if (record.getUserId() == dbUser.getId()){
+                    userList.remove(j);
+                }
+            }
+        }
+        return userList;
+    }
+
+    @Override
     public VoList<VoUser> selectListUserByPlaceId(Integer placeId, Integer currentPage, Integer pageSize) {
         User user = new User();
         user.setPlaceId(placeId);
         user.setCurrentPage(currentPage);
         user.setPageSize(pageSize);
-
         VoList<VoUser> voList = new VoList<>();
         voList.setItems(getItems(user));
         voList.setTotalSize(userMapper.count(user));

@@ -1,6 +1,7 @@
 package com.fangaoxs.lotteryserver.service.impl;
 
 import com.fangaoxs.lotteryserver.mapper.PrizeMapper;
+import com.fangaoxs.lotteryserver.pojo.Place;
 import com.fangaoxs.lotteryserver.pojo.Prize;
 import com.fangaoxs.lotteryserver.service.PrizeService;
 import com.fangaoxs.lotteryserver.vo.VoList;

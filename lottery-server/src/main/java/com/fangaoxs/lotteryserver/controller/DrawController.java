@@ -37,6 +37,7 @@ public class DrawController {
     @Autowired
     private PrizeService prizeService;
 
+
     @Autowired
     private DrawService drawService;
 
@@ -65,7 +66,7 @@ public class DrawController {
                     .setMessage(message.toString())
                     .setData(new ArrayList<>());
         }
-        List<User> userList = userService.selectListUserByPlaceId(placeId);//根据会场编号查询出该会场的已登记用户
+        List<User> userList = userService.selectListUserByPlaceIdNotPrize(placeId);//根据会场编号查询出该会场的已登记用户s
         int min = Math.min(number,balance); //余量、抽奖数量取min
         List<VoUser> drawVoUserList = drawService.makeDraw(userList, min, dbPrize);
         return new ResultResponse()

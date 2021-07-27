@@ -1,8 +1,11 @@
 package com.fangaoxs.lotteryserver.service;
 
+import com.fangaoxs.lotteryserver.pojo.Prize;
 import com.fangaoxs.lotteryserver.vo.VoList;
 import com.fangaoxs.lotteryserver.vo.VoPrize;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

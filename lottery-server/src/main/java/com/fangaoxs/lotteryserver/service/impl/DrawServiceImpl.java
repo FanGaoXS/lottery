@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,7 +50,7 @@ public class DrawServiceImpl implements DrawService {
             prizeService.updateOnePrizeBalance(voPrize.getId(), voPrize.getBalance()-drawUserList.size());
             //record表新增
             List<Record> recordList = userListToRecordList(drawUserList, voPrize.getId());
-            recordService.insertBatchRecord(recordList);
+            if (!recordList.isEmpty()) recordService.insertBatchRecord(recordList);
         } catch (DataAccessException e){
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();//事务回滚
@@ -70,12 +67,11 @@ public class DrawServiceImpl implements DrawService {
      */
     private List<User> draw(List<User> userList,int number){
         int size = Math.min(userList.size(),number); //保证返回的数组的大小
-        List<User> resultUserList = new ArrayList<>();
+        HashSet<User> resultUserSet = new HashSet<>();
         for (int i = 0; i < size; i++) {
-            User user = userList.get(i);
-            resultUserList.add(user);
+            resultUserSet.add(userList.get(i));
         }
-        return resultUserList;
+        return new ArrayList<>(resultUserSet);
     }
 
     /**

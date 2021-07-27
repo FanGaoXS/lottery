@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -22,7 +23,8 @@ import java.util.ArrayList;
  * @Description:
  */
 @Configuration
-@EnableSwagger2
+//@EnableSwagger2
+@EnableOpenApi
 public class SwaggerConfig {
 
     @Value("${spring.profiles.active}")
@@ -32,7 +34,7 @@ public class SwaggerConfig {
     public Docket docket(@Qualifier("apiInfo") ApiInfo apiInfo){
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo)
-                //开启Swagger，默认是false
+                //开启Swagger，默认是false（如果不是prod环境就未true，也就是开启）
                 .enable(!activeProfile.equals("prod"))
                 .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
                 //扫描所有接口
@@ -55,7 +57,7 @@ public class SwaggerConfig {
         return new ApiInfo(
                 "wqk的swaggerAPI配置文档",
                 "Api接口配置文档",
-                "v1.3",
+                "v1.4",
                 "urn:tos",
                 new Contact("wqk", "", "a954278478@gmail.com"),
                 "Apache 2.0",

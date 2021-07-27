@@ -30,6 +30,13 @@ public interface UserService {
 
     List<User> selectListUserByPlaceId(Integer placeId);
 
+    /**
+     *  查询某会场已登记但还未中奖的用户集合
+     * @param placeId   会场编号
+     * @return
+     */
+    List<User> selectListUserByPlaceIdNotPrize(Integer placeId);
+
     VoList<VoUser> selectListUserByPlaceId(Integer placeId,
                                            Integer currentPage,
                                            Integer pageSize);

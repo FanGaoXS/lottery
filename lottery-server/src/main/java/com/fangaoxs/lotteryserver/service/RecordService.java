@@ -26,4 +26,6 @@ public interface RecordService {
     VoList<VoRecord> selectListRecordByPlaceId(Integer placeId,Integer currentPage,Integer pageSize);
 
     VoList<VoRecord> selectListRecordByPrizeId(Integer prizeId,Integer currentPage,Integer pageSize);
+
+    List<Record> selectListRecordByPlaceId(Integer placeId);
 }
